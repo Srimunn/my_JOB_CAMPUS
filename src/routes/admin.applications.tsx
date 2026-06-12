@@ -16,9 +16,15 @@ function Apps() {
     queryFn: async () => {
       const { data } = await supabase
         .from("applications")
-        .select("id, created_at, status, resume_url, user_id, job:jobs(id,title,company), profile:profiles!applications_user_id_fkey(full_name,email,phone)")
+        .select("id, created_at, status, resume_url, user_id, job:jobs(id,title,company)")
         .order("created_at", { ascending: false });
-      return data ?? [];
+      const apps = data ?? [];
+      const userIds = Array.from(new Set(apps.map((a) => a.user_id)));
+      const { data: profiles } = userIds.length
+        ? await supabase.from("profiles").select("id,full_name,email,phone").in("id", userIds)
+        : { data: [] as { id: string; full_name: string | null; email: string | null; phone: string | null }[] };
+      const map = new Map((profiles ?? []).map((p) => [p.id, p]));
+      return apps.map((a) => ({ ...a, profile: map.get(a.user_id) ?? null }));
     },
   });
 
@@ -37,7 +43,7 @@ function Apps() {
           <div className="divide-y divide-border">
             {data.map((a) => {
               const job = a.job as { id: string; title: string; company: string } | null;
-              const profile = a.profile as { full_name: string | null; email: string | null; phone: string | null } | null;
+              const profile = a.profile;
               return (
                 <div key={a.id} className="flex flex-wrap items-start justify-between gap-3 p-4">
                   <div>
