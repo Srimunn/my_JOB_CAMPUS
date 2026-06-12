@@ -18,6 +18,10 @@ import { Route as CompaniesRouteImport } from './routes/companies'
 import { Route as CareerGuidanceRouteImport } from './routes/career-guidance'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as JobIdRouteImport } from './routes/job.$id'
+import { Route as AuthRegisterRouteImport } from './routes/auth.register'
+import { Route as AuthLoginRouteImport } from './routes/auth.login'
+import { Route as AuthAdminRouteImport } from './routes/auth.admin'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -64,6 +68,26 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const JobIdRoute = JobIdRouteImport.update({
+  id: '/job/$id',
+  path: '/job/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRegisterRoute = AuthRegisterRouteImport.update({
+  id: '/auth/register',
+  path: '/auth/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthAdminRoute = AuthAdminRouteImport.update({
+  id: '/auth/admin',
+  path: '/auth/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +99,10 @@ export interface FileRoutesByFullPath {
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/job/$id': typeof JobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +114,10 @@ export interface FileRoutesByTo {
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/job/$id': typeof JobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +130,10 @@ export interface FileRoutesById {
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/auth/admin': typeof AuthAdminRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/register': typeof AuthRegisterRoute
+  '/job/$id': typeof JobIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +147,10 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/terms'
+    | '/auth/admin'
+    | '/auth/login'
+    | '/auth/register'
+    | '/job/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +162,10 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/terms'
+    | '/auth/admin'
+    | '/auth/login'
+    | '/auth/register'
+    | '/job/$id'
   id:
     | '__root__'
     | '/'
@@ -133,6 +177,10 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/terms'
+    | '/auth/admin'
+    | '/auth/login'
+    | '/auth/register'
+    | '/job/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +193,10 @@ export interface RootRouteChildren {
   JobsRoute: typeof JobsRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  AuthAdminRoute: typeof AuthAdminRoute
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthRegisterRoute: typeof AuthRegisterRoute
+  JobIdRoute: typeof JobIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +264,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/job/$id': {
+      id: '/job/$id'
+      path: '/job/$id'
+      fullPath: '/job/$id'
+      preLoaderRoute: typeof JobIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/register': {
+      id: '/auth/register'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/admin': {
+      id: '/auth/admin'
+      path: '/auth/admin'
+      fullPath: '/auth/admin'
+      preLoaderRoute: typeof AuthAdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -225,6 +305,10 @@ const rootRouteChildren: RootRouteChildren = {
   JobsRoute: JobsRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  AuthAdminRoute: AuthAdminRoute,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthRegisterRoute: AuthRegisterRoute,
+  JobIdRoute: JobIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
