@@ -10,22 +10,36 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as SeekerRouteImport } from './routes/seeker'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as JobsRouteImport } from './routes/jobs'
 import { Route as GovtJobsRouteImport } from './routes/govt-jobs'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CompaniesRouteImport } from './routes/companies'
 import { Route as CareerGuidanceRouteImport } from './routes/career-guidance'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SeekerIndexRouteImport } from './routes/seeker.index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as SeekerJobsRouteImport } from './routes/seeker.jobs'
+import { Route as SeekerAppliedRouteImport } from './routes/seeker.applied'
 import { Route as JobIdRouteImport } from './routes/job.$id'
 import { Route as AuthRegisterRouteImport } from './routes/auth.register'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthAdminRouteImport } from './routes/auth.admin'
+import { Route as AdminManageJobsRouteImport } from './routes/admin.manage-jobs'
+import { Route as AdminApplicationsRouteImport } from './routes/admin.applications'
+import { Route as AdminAddJobRouteImport } from './routes/admin.add-job'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
   path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SeekerRoute = SeekerRouteImport.update({
+  id: '/seeker',
+  path: '/seeker',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -58,6 +72,11 @@ const CareerGuidanceRoute = CareerGuidanceRouteImport.update({
   path: '/career-guidance',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -67,6 +86,26 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SeekerIndexRoute = SeekerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SeekerRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const SeekerJobsRoute = SeekerJobsRouteImport.update({
+  id: '/jobs',
+  path: '/jobs',
+  getParentRoute: () => SeekerRoute,
+} as any)
+const SeekerAppliedRoute = SeekerAppliedRouteImport.update({
+  id: '/applied',
+  path: '/applied',
+  getParentRoute: () => SeekerRoute,
 } as any)
 const JobIdRoute = JobIdRouteImport.update({
   id: '/job/$id',
@@ -88,21 +127,45 @@ const AuthAdminRoute = AuthAdminRouteImport.update({
   path: '/auth/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminManageJobsRoute = AdminManageJobsRouteImport.update({
+  id: '/manage-jobs',
+  path: '/manage-jobs',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminApplicationsRoute = AdminApplicationsRouteImport.update({
+  id: '/applications',
+  path: '/applications',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminAddJobRoute = AdminAddJobRouteImport.update({
+  id: '/add-job',
+  path: '/add-job',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/career-guidance': typeof CareerGuidanceRoute
   '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/govt-jobs': typeof GovtJobsRoute
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
+  '/seeker': typeof SeekerRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/add-job': typeof AdminAddJobRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/manage-jobs': typeof AdminManageJobsRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/job/$id': typeof JobIdRoute
+  '/seeker/applied': typeof SeekerAppliedRoute
+  '/seeker/jobs': typeof SeekerJobsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/seeker/': typeof SeekerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -114,43 +177,68 @@ export interface FileRoutesByTo {
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/admin/add-job': typeof AdminAddJobRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/manage-jobs': typeof AdminManageJobsRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/job/$id': typeof JobIdRoute
+  '/seeker/applied': typeof SeekerAppliedRoute
+  '/seeker/jobs': typeof SeekerJobsRoute
+  '/admin': typeof AdminIndexRoute
+  '/seeker': typeof SeekerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/career-guidance': typeof CareerGuidanceRoute
   '/companies': typeof CompaniesRoute
   '/contact': typeof ContactRoute
   '/govt-jobs': typeof GovtJobsRoute
   '/jobs': typeof JobsRoute
   '/privacy': typeof PrivacyRoute
+  '/seeker': typeof SeekerRouteWithChildren
   '/terms': typeof TermsRoute
+  '/admin/add-job': typeof AdminAddJobRoute
+  '/admin/applications': typeof AdminApplicationsRoute
+  '/admin/manage-jobs': typeof AdminManageJobsRoute
   '/auth/admin': typeof AuthAdminRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/register': typeof AuthRegisterRoute
   '/job/$id': typeof JobIdRoute
+  '/seeker/applied': typeof SeekerAppliedRoute
+  '/seeker/jobs': typeof SeekerJobsRoute
+  '/admin/': typeof AdminIndexRoute
+  '/seeker/': typeof SeekerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/career-guidance'
     | '/companies'
     | '/contact'
     | '/govt-jobs'
     | '/jobs'
     | '/privacy'
+    | '/seeker'
     | '/terms'
+    | '/admin/add-job'
+    | '/admin/applications'
+    | '/admin/manage-jobs'
     | '/auth/admin'
     | '/auth/login'
     | '/auth/register'
     | '/job/$id'
+    | '/seeker/applied'
+    | '/seeker/jobs'
+    | '/admin/'
+    | '/seeker/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -162,36 +250,54 @@ export interface FileRouteTypes {
     | '/jobs'
     | '/privacy'
     | '/terms'
+    | '/admin/add-job'
+    | '/admin/applications'
+    | '/admin/manage-jobs'
     | '/auth/admin'
     | '/auth/login'
     | '/auth/register'
     | '/job/$id'
+    | '/seeker/applied'
+    | '/seeker/jobs'
+    | '/admin'
+    | '/seeker'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/career-guidance'
     | '/companies'
     | '/contact'
     | '/govt-jobs'
     | '/jobs'
     | '/privacy'
+    | '/seeker'
     | '/terms'
+    | '/admin/add-job'
+    | '/admin/applications'
+    | '/admin/manage-jobs'
     | '/auth/admin'
     | '/auth/login'
     | '/auth/register'
     | '/job/$id'
+    | '/seeker/applied'
+    | '/seeker/jobs'
+    | '/admin/'
+    | '/seeker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   CareerGuidanceRoute: typeof CareerGuidanceRoute
   CompaniesRoute: typeof CompaniesRoute
   ContactRoute: typeof ContactRoute
   GovtJobsRoute: typeof GovtJobsRoute
   JobsRoute: typeof JobsRoute
   PrivacyRoute: typeof PrivacyRoute
+  SeekerRoute: typeof SeekerRouteWithChildren
   TermsRoute: typeof TermsRoute
   AuthAdminRoute: typeof AuthAdminRoute
   AuthLoginRoute: typeof AuthLoginRoute
@@ -206,6 +312,13 @@ declare module '@tanstack/react-router' {
       path: '/terms'
       fullPath: '/terms'
       preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seeker': {
+      id: '/seeker'
+      path: '/seeker'
+      fullPath: '/seeker'
+      preLoaderRoute: typeof SeekerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -250,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CareerGuidanceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -263,6 +383,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/seeker/': {
+      id: '/seeker/'
+      path: '/'
+      fullPath: '/seeker/'
+      preLoaderRoute: typeof SeekerIndexRouteImport
+      parentRoute: typeof SeekerRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/seeker/jobs': {
+      id: '/seeker/jobs'
+      path: '/jobs'
+      fullPath: '/seeker/jobs'
+      preLoaderRoute: typeof SeekerJobsRouteImport
+      parentRoute: typeof SeekerRoute
+    }
+    '/seeker/applied': {
+      id: '/seeker/applied'
+      path: '/applied'
+      fullPath: '/seeker/applied'
+      preLoaderRoute: typeof SeekerAppliedRouteImport
+      parentRoute: typeof SeekerRoute
     }
     '/job/$id': {
       id: '/job/$id'
@@ -292,18 +440,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/manage-jobs': {
+      id: '/admin/manage-jobs'
+      path: '/manage-jobs'
+      fullPath: '/admin/manage-jobs'
+      preLoaderRoute: typeof AdminManageJobsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/applications': {
+      id: '/admin/applications'
+      path: '/applications'
+      fullPath: '/admin/applications'
+      preLoaderRoute: typeof AdminApplicationsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/add-job': {
+      id: '/admin/add-job'
+      path: '/add-job'
+      fullPath: '/admin/add-job'
+      preLoaderRoute: typeof AdminAddJobRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminAddJobRoute: typeof AdminAddJobRoute
+  AdminApplicationsRoute: typeof AdminApplicationsRoute
+  AdminManageJobsRoute: typeof AdminManageJobsRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminAddJobRoute: AdminAddJobRoute,
+  AdminApplicationsRoute: AdminApplicationsRoute,
+  AdminManageJobsRoute: AdminManageJobsRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface SeekerRouteChildren {
+  SeekerAppliedRoute: typeof SeekerAppliedRoute
+  SeekerJobsRoute: typeof SeekerJobsRoute
+  SeekerIndexRoute: typeof SeekerIndexRoute
+}
+
+const SeekerRouteChildren: SeekerRouteChildren = {
+  SeekerAppliedRoute: SeekerAppliedRoute,
+  SeekerJobsRoute: SeekerJobsRoute,
+  SeekerIndexRoute: SeekerIndexRoute,
+}
+
+const SeekerRouteWithChildren =
+  SeekerRoute._addFileChildren(SeekerRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   CareerGuidanceRoute: CareerGuidanceRoute,
   CompaniesRoute: CompaniesRoute,
   ContactRoute: ContactRoute,
   GovtJobsRoute: GovtJobsRoute,
   JobsRoute: JobsRoute,
   PrivacyRoute: PrivacyRoute,
+  SeekerRoute: SeekerRouteWithChildren,
   TermsRoute: TermsRoute,
   AuthAdminRoute: AuthAdminRoute,
   AuthLoginRoute: AuthLoginRoute,
