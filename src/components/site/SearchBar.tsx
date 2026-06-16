@@ -1,21 +1,23 @@
 import { Search } from "lucide-react";
-import { useNavigate } from "@tanstack/react-router";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CITIES } from "@/lib/data";
 
 export function SearchBar({ defaultCategory }: { defaultCategory?: string } = {}) {
   const [q, setQ] = useState("");
   const [loc, setLoc] = useState("");
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        navigate({
-          to: defaultCategory === "Government-jobs" ? "/govt-jobs" : "/jobs",
-          search: { q: q || undefined, loc: loc || undefined } as never,
-        });
+        const params = new URLSearchParams();
+        if (q) params.set("q", q);
+        if (loc) params.set("loc", loc);
+        const path = defaultCategory === "Government-jobs" ? "/govt-jobs" : "/jobs";
+        const qs = params.toString();
+        router.push(qs ? `${path}?${qs}` : path);
       }}
       className="flex w-full items-center gap-2 rounded-full bg-white p-2 shadow-[var(--shadow-soft)]"
     >
@@ -33,7 +35,9 @@ export function SearchBar({ defaultCategory }: { defaultCategory?: string } = {}
       >
         <option value="">All Locations</option>
         {CITIES.map((c) => (
-          <option key={c.name} value={c.name}>{c.name}</option>
+          <option key={c.name} value={c.name}>
+            {c.name}
+          </option>
         ))}
       </select>
       <button

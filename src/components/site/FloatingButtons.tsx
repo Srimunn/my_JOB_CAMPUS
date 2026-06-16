@@ -4,7 +4,7 @@ export function FloatingButtons() {
   return (
     <>
       <a
-        href="https://instagram.com"
+        href="https://www.instagram.com/myjobcampustamil?igsh=Zzdlc3RrNTZpYWtt "
         target="_blank"
         rel="noreferrer noopener"
         aria-label="Instagram"
@@ -14,7 +14,7 @@ export function FloatingButtons() {
         <Instagram className="h-5 w-5" />
       </a>
       <a
-        href="https://wa.me/919999999999?text=Hi%20My%20Job%20Campus%2C%20please%20send%20me%20instant%20job%20alerts"
+        href="https://wa.me/https://www.whatsapp.com/channel/0029Vb6ysZf2ER6fKzAXfY2C?text=Hi%20My%20Job%20Campus%2C%20please%20send%20me%20instant%20job%20alerts"
         target="_blank"
         rel="noreferrer noopener"
         className="fixed bottom-5 right-5 z-30 flex items-center gap-2 rounded-full bg-whatsapp px-4 py-3 text-sm font-semibold text-white shadow-lg transition-transform hover:scale-105"

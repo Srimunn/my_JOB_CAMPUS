@@ -30,3 +30,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Next.js and typescript build files
+.next/
+out/
+build/
+tsconfig.tsbuildinfo
+curl_res.txt
+

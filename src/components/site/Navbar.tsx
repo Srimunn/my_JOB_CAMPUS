@@ -1,4 +1,7 @@
-import { Link } from "@tanstack/react-router";
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import { useState } from "react";
 import {
@@ -9,6 +12,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
+import Image from "next/image";
+import logo from "@/assets/logo.jpg";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -22,60 +27,87 @@ const NAV = [
 export function Navbar() {
   const { user, role, signOut } = useAuth();
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="border-b-2 border-foreground/90 bg-background sticky top-0 z-40">
+    <header className="sticky top-0 z-40 border-b-[10px] border-white bg-white text-foreground shadow-sm rounded-b-lg transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
-        <Link to="/" className="flex items-center gap-2 font-display text-xl font-extrabold text-foreground">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">MJ</span>
-          My Job Campus
+        <Link
+          href="/"
+          className="group flex items-center gap-2.5 font-display text-xl font-extrabold text-foreground"
+        >
+          <Image
+            src={logo}
+            alt="My Job Campus logo"
+            width={160}
+            height={160}
+            className="object-contain mt-[50px]"
+            priority
+          />
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
-          {NAV.map((n) => (
-            <Link
-              key={n.to}
-              to={n.to}
-              activeOptions={{ exact: n.to === "/" }}
-              activeProps={{ className: "text-primary font-semibold" }}
-              className="text-sm font-medium text-foreground/80 transition-colors hover:text-primary"
-            >
-              {n.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-6 lg:flex translate-y-[3px]">
+          {NAV.map((n) => {
+            const active =
+              (n.to as string) === "/"
+                ? pathname === "/"
+                : pathname === n.to || ((n.to as string) !== "/" && pathname.startsWith(n.to));
+            return (
+              <Link
+                key={n.to}
+                href={n.to}
+                className={`text-sm font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] hover:scale-105 ${active ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-foreground/80 hover:text-primary">
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition-all duration-200 hover:text-primary hover:translate-y-[-1px] cursor-pointer">
               Resources <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild><Link to="/privacy">Privacy Policy</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/terms">Terms & Conditions</Link></DropdownMenuItem>
+            <DropdownMenuContent className="rounded-xl border border-border shadow-lg">
+              <DropdownMenuItem asChild>
+                <Link href="/privacy" className="cursor-pointer w-full block">
+                  Privacy Policy
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/terms" className="cursor-pointer w-full block">
+                  Terms & Conditions
+                </Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Link to="/contact" className="text-sm font-medium text-foreground/80 hover:text-primary">
+          <Link
+            href="/contact"
+            className={`text-sm font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] ${pathname === "/contact" ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
+          >
             Contact Us
           </Link>
         </nav>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           {user ? (
             <>
-              <Link to={role === "admin" ? "/admin" : "/seeker"}>
-                <Button variant="outline" className="rounded-full">Dashboard</Button>
+              <Link href={role === "admin" ? "/admin" : "/seeker"}>
+                <Button
+                  variant="outline"
+                  className="rounded-full shadow-sm hover:shadow-md transition-all duration-300"
+                >
+                  Dashboard
+                </Button>
               </Link>
-              <Button onClick={signOut} variant="ghost" className="rounded-full">Sign out</Button>
+              <Button onClick={signOut} variant="ghost" className="rounded-full hover:bg-muted/80">
+                Sign out
+              </Button>
             </>
           ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="rounded-full px-6">Sign in</Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild><Link to="/auth/admin">Admin Login</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link to="/auth/login">Job Seeker Login</Link></DropdownMenuItem>
-                <DropdownMenuItem asChild><Link to="/auth/register">Job Seeker Register</Link></DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link href="/auth/login">
+              <Button className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                Sign in
+              </Button>
+            </Link>
           )}
         </div>
 
@@ -85,29 +117,84 @@ export function Navbar() {
       </div>
 
       {open && (
-        <div className="border-t border-border bg-background lg:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-3">
+        <div className="fixed inset-0 bg-white/90 backdrop-blur-md flex flex-col items-center justify-center animate-fade-in z-50">
+          <button
+            onClick={() => setOpen(false)}
+            className="absolute top-4 right-4 text-foreground"
+            aria-label="Close Menu"
+          >
+            <X className="h-6 w-6" />
+          </button>
+          <nav className="flex flex-col gap-4 items-center">
             {NAV.map((n) => (
-              <Link key={n.to} to={n.to} onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">
+              <Link
+                key={n.to}
+                href={n.to}
+                onClick={() => setOpen(false)}
+                className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+              >
                 {n.label}
               </Link>
             ))}
-            <Link to="/privacy" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Privacy Policy</Link>
-            <Link to="/terms" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Terms & Conditions</Link>
-            <Link to="/contact" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Contact Us</Link>
+            <Link
+              href="/privacy"
+              onClick={() => setOpen(false)}
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Privacy Policy
+            </Link>
+            <Link
+              href="/terms"
+              onClick={() => setOpen(false)}
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Terms & Conditions
+            </Link>
+            <Link
+              href="/contact"
+              onClick={() => setOpen(false)}
+              className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+            >
+              Contact Us
+            </Link>
             {user ? (
               <>
-                <Link to={role === "admin" ? "/admin" : "/seeker"} onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Dashboard</Link>
-                <button onClick={() => { signOut(); setOpen(false); }} className="rounded px-2 py-2 text-left text-sm hover:bg-muted">Sign out</button>
+                <Link
+                  href={role === "admin" ? "/admin" : "/seeker"}
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => {
+                    signOut();
+                    setOpen(false);
+                  }}
+                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  Sign out
+                </button>
               </>
             ) : (
               <>
-                <Link to="/auth/admin" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Admin Login</Link>
-                <Link to="/auth/login" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Job Seeker Login</Link>
-                <Link to="/auth/register" onClick={() => setOpen(false)} className="rounded px-2 py-2 text-sm hover:bg-muted">Register</Link>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
+                >
+                  Create Account
+                </Link>
               </>
             )}
-          </div>
+          </nav>
         </div>
       )}
     </header>
