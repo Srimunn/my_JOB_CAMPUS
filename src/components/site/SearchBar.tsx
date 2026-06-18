@@ -1,12 +1,16 @@
+"use client";
+
 import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CITIES } from "@/lib/data";
+import { useTranslation } from "@/lib/i18n";
 
 export function SearchBar({ defaultCategory }: { defaultCategory?: string } = {}) {
   const [q, setQ] = useState("");
   const [loc, setLoc] = useState("");
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <form
@@ -24,16 +28,16 @@ export function SearchBar({ defaultCategory }: { defaultCategory?: string } = {}
       <input
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder="Job Title or Keyword"
+        placeholder={t("search.keyword")}
         className="min-w-0 flex-1 bg-transparent px-4 py-2 text-sm text-foreground outline-none placeholder:text-muted-foreground"
       />
       <div className="hidden h-6 w-px bg-border sm:block" />
       <select
         value={loc}
         onChange={(e) => setLoc(e.target.value)}
-        className="hidden bg-transparent px-3 py-2 text-sm text-foreground outline-none sm:block"
+        className="hidden bg-transparent px-3 py-2 text-sm text-foreground outline-none sm:block cursor-pointer"
       >
-        <option value="">All Locations</option>
+        <option value="">{t("search.location")}</option>
         {CITIES.map((c) => (
           <option key={c.name} value={c.name}>
             {c.name}

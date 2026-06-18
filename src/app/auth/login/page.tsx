@@ -7,8 +7,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { toast } from "sonner";
+import { useTranslation } from "@/lib/i18n";
 
 export default function Login() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,10 +20,10 @@ export default function Login() {
     <SiteLayout>
       <div className="mx-auto max-w-md px-4 py-16">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <h1 className="font-display text-2xl font-extrabold text-center">Welcome back</h1>
-          <p className="mt-1 text-sm text-muted-foreground text-center">
-            Sign in to your account to continue.
-          </p>
+          <h1 className="font-display text-2xl font-extrabold text-center">
+            {t("auth.welcomeBack")}
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground text-center">{t("auth.signInSub")}</p>
           <form
             className="mt-6 space-y-4"
             onSubmit={async (e) => {
@@ -132,7 +134,7 @@ export default function Login() {
             }}
           >
             <div>
-              <label className="mb-1 block text-sm font-medium">Email</label>
+              <label className="mb-1 block text-sm font-medium">{t("auth.emailLabel")}</label>
               <input
                 required
                 type="email"
@@ -142,7 +144,7 @@ export default function Login() {
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium">Password</label>
+              <label className="mb-1 block text-sm font-medium">{t("auth.passwordLabel")}</label>
               <input
                 required
                 type="password"
@@ -152,13 +154,13 @@ export default function Login() {
               />
             </div>
             <Button type="submit" disabled={loading} className="w-full rounded-full cursor-pointer">
-              {loading ? "Signing in…" : "Login"}
+              {loading ? t("auth.loggingIn") : t("auth.loginButton")}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            New here?{" "}
+            {t("auth.newHere")}{" "}
             <Link href="/auth/register" className="text-primary underline">
-              Create an account
+              {t("auth.createAccount")}
             </Link>
           </p>
         </div>

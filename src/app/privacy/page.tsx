@@ -3,8 +3,10 @@
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useState, useEffect, Suspense } from "react";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { useTranslation } from "@/lib/i18n";
 
 export default function PrivacyPolicy() {
+  const { t } = useTranslation();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -101,10 +103,10 @@ export default function PrivacyPolicy() {
         <section className="pt-[10px] pb-16 text-center animate-fade-in-up">
           <div className="mx-auto max-w-5xl px-4">
             <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight lg:whitespace-nowrap">
-              Privacy Policy
+              {t("privacy.title")}
             </h1>
             <p className="mt-4 text-base font-semibold text-muted-foreground/80">
-              How My Job Campus protects your information
+              {t("privacy.subtitle")}
             </p>
           </div>
         </section>
@@ -126,7 +128,9 @@ export default function PrivacyPolicy() {
               style={{ animationDelay: "100ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-2xl font-bold text-foreground">Who we are</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {t("privacy.whoWeAre")}
+              </h2>
               <p>
                 Our website address is:{" "}
                 <a
@@ -146,7 +150,9 @@ export default function PrivacyPolicy() {
               style={{ animationDelay: "150ms" }}
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-2xl font-bold text-foreground">Comments</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {t("privacy.comments")}
+              </h2>
               <p>
                 When visitors leave comments on the site we collect the data shown in the comments
                 form, and also the visitor's IP address and browser user agent string to help spam
@@ -174,7 +180,9 @@ export default function PrivacyPolicy() {
               style={{ animationDelay: "200ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-2xl font-bold text-foreground">Media</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {t("privacy.media")}
+              </h2>
               <p>
                 If you upload images to the website, you should avoid uploading images with embedded
                 location data (EXIF GPS) included. Visitors to the website can download and extract
@@ -187,7 +195,9 @@ export default function PrivacyPolicy() {
               style={{ animationDelay: "250ms" }}
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-2xl font-bold text-foreground">Cookies</h2>
+              <h2 className="font-display text-2xl font-bold text-foreground">
+                {t("privacy.cookies")}
+              </h2>
               <p>
                 If you leave a comment on our site you may opt-in to saving your name, email address
                 and website in cookies. These are for your convenience so that you do not have to
@@ -218,7 +228,7 @@ export default function PrivacyPolicy() {
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-2xl font-bold text-foreground">
-                Embedded content from other websites
+                {t("privacy.embeddedContent")}
               </h2>
               <p>
                 Articles on this site may include embedded content (e.g. videos, images, articles,
@@ -239,7 +249,7 @@ export default function PrivacyPolicy() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-2xl font-bold text-foreground">
-                Who we share your data with
+                {t("privacy.whoWeShare")}
               </h2>
               <p>
                 If you request a password reset, your IP address will be included in the reset
@@ -253,7 +263,7 @@ export default function PrivacyPolicy() {
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-2xl font-bold text-foreground">
-                How long we retain your data
+                {t("privacy.howLongRetain")}
               </h2>
               <p>
                 If you leave a comment, the comment and its metadata are retained indefinitely. This
@@ -274,7 +284,7 @@ export default function PrivacyPolicy() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-2xl font-bold text-foreground">
-                What rights you have over your data
+                {t("privacy.whatRights")}
               </h2>
               <p>
                 If you have an account on this site, or have left comments, you can request to
@@ -291,7 +301,7 @@ export default function PrivacyPolicy() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-2xl font-bold text-foreground">
-                Where your data is sent
+                {t("privacy.whereSent")}
               </h2>
               <p>Visitor comments may be checked through an automated spam detection service.</p>
             </section>

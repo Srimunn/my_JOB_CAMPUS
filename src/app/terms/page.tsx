@@ -3,8 +3,10 @@
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { useState, useEffect, Suspense } from "react";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { useTranslation } from "@/lib/i18n";
 
 export default function Terms() {
+  const { t } = useTranslation();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -76,10 +78,10 @@ export default function Terms() {
         <section className="pt-[10px] pb-16 text-center animate-fade-in-up">
           <div className="mx-auto max-w-5xl px-4">
             <h1 className="font-display text-4xl sm:text-5xl font-extrabold text-foreground tracking-tight leading-tight lg:whitespace-nowrap">
-              Terms &amp; Conditions
+              {t("terms.title")}
             </h1>
             <p className="mt-4 text-base font-semibold text-muted-foreground/80">
-              Effective Date: 26th April, 2025.
+              {t("terms.subtitle")}
             </p>
           </div>
         </section>
@@ -102,7 +104,7 @@ export default function Terms() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                1. Acceptance of Terms
+                {t("terms.acceptance")}
               </h2>
               <p>
                 By accessing and using myjobcampus.com ("the Website"), you agree to be bound by
@@ -116,7 +118,9 @@ export default function Terms() {
               style={{ animationDelay: "150ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-xl font-bold text-foreground">2. Eligibility</h2>
+              <h2 className="font-display text-xl font-bold text-foreground">
+                {t("terms.eligibility")}
+              </h2>
               <p>
                 Users must be at least 18 years old or the age of majority in their jurisdiction to
                 use this Website. By using the Website, you represent and warrant that you meet this
@@ -129,7 +133,9 @@ export default function Terms() {
               style={{ animationDelay: "200ms" }}
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-xl font-bold text-foreground">3. User Accounts</h2>
+              <h2 className="font-display text-xl font-bold text-foreground">
+                {t("terms.userAccounts")}
+              </h2>
               <div className="space-y-3">
                 <p>
                   <strong className="text-foreground">Registration:</strong> To access certain
@@ -152,7 +158,7 @@ export default function Terms() {
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                4. Use of the Website
+                {t("terms.useOfWebsite")}
               </h2>
               <p>
                 You agree to use the Website only for lawful purposes and in accordance with these
@@ -177,7 +183,7 @@ export default function Terms() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                5. Intellectual Property Rights
+                {t("terms.intellectualProperty")}
               </h2>
               <p>
                 All content on the Website, including text, graphics, logos, and software, is the
@@ -193,7 +199,7 @@ export default function Terms() {
               className="space-y-4 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                6. Job Listings and Applications
+                {t("terms.jobListings")}
               </h2>
               <div className="space-y-3">
                 <p>
@@ -214,11 +220,13 @@ export default function Terms() {
               style={{ animationDelay: "400ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-xl font-bold text-foreground">7. Privacy</h2>
+              <h2 className="font-display text-xl font-bold text-foreground">
+                {t("terms.privacy")}
+              </h2>
               <p>
                 Your use of the Website is also governed by our{" "}
                 <a href="/privacy" className="text-primary hover:underline font-semibold">
-                  Privacy Policy
+                  {t("nav.privacyPolicy")}
                 </a>
                 , which outlines how we collect, use, and protect your personal information.
               </p>
@@ -230,7 +238,7 @@ export default function Terms() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                8. Limitation of Liability
+                {t("terms.limitation")}
               </h2>
               <p>
                 To the fullest extent permitted by law, myjobcampus.com shall not be liable for any
@@ -244,7 +252,9 @@ export default function Terms() {
               style={{ animationDelay: "500ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-xl font-bold text-foreground">9. Indemnification</h2>
+              <h2 className="font-display text-xl font-bold text-foreground">
+                {t("terms.indemnification")}
+              </h2>
               <p>
                 You agree to indemnify and hold harmless myjobcampus.com, its affiliates, and their
                 respective officers, directors, employees, and agents from any claims, liabilities,
@@ -259,7 +269,7 @@ export default function Terms() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                10. Modifications to Terms
+                {t("terms.modifications")}
               </h2>
               <p>
                 We reserve the right to modify these Terms at any time. Changes will be effective
@@ -273,7 +283,9 @@ export default function Terms() {
               style={{ animationDelay: "600ms" }}
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
-              <h2 className="font-display text-xl font-bold text-foreground">11. Governing Law</h2>
+              <h2 className="font-display text-xl font-bold text-foreground">
+                {t("terms.governingLaw")}
+              </h2>
               <p>
                 These Terms shall be governed by and construed in accordance with the laws of India,
                 without regard to its conflict of law principles.
@@ -286,7 +298,7 @@ export default function Terms() {
               className="space-y-3 p-6 rounded-2xl border-l-2 border-transparent hover:border-accent hover:bg-white/40 dark:hover:bg-slate-950/20 hover:shadow-sm transition-all duration-300 animate-fade-in-up"
             >
               <h2 className="font-display text-xl font-bold text-foreground">
-                12. Contact Information
+                {t("terms.contactInfo")}
               </h2>
               <p>
                 For any questions or concerns regarding these Terms, please contact us at{" "}

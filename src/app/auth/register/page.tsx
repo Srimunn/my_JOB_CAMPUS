@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useTranslation } from "@/lib/i18n";
 
 const schema = z
   .object({
@@ -23,6 +24,7 @@ const schema = z
   });
 
 export default function Register() {
+  const { t } = useTranslation();
   const router = useRouter();
   const [form, setForm] = useState({
     full_name: "",
@@ -38,8 +40,8 @@ export default function Register() {
     <SiteLayout>
       <div className="mx-auto max-w-lg px-4 py-12">
         <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <h1 className="font-display text-2xl font-extrabold">Create your account</h1>
-          <p className="mt-1 text-sm text-muted-foreground">Free for job seekers. No spam.</p>
+          <h1 className="font-display text-2xl font-extrabold">{t("auth.createAccountTitle")}</h1>
+          <p className="mt-1 text-sm text-muted-foreground">{t("auth.registerSub")}</p>
           <form
             className="mt-6 space-y-4"
             onSubmit={async (e) => {
@@ -85,35 +87,35 @@ export default function Register() {
             }}
           >
             <Field
-              label="Full Name"
+              label={t("auth.fullName")}
               value={form.full_name}
               onChange={(v) => setForm({ ...form, full_name: v })}
             />
             <Field
-              label="Email"
+              label={t("auth.emailLabel")}
               type="email"
               value={form.email}
               onChange={(v) => setForm({ ...form, email: v })}
             />
             <Field
-              label="Phone"
+              label={t("auth.phone")}
               value={form.phone}
               onChange={(v) => setForm({ ...form, phone: v })}
             />
             <Field
-              label="Password"
+              label={t("auth.passwordLabel")}
               type="password"
               value={form.password}
               onChange={(v) => setForm({ ...form, password: v })}
             />
             <Field
-              label="Confirm Password"
+              label={t("auth.confirmPassword")}
               type="password"
               value={form.confirm}
               onChange={(v) => setForm({ ...form, confirm: v })}
             />
             <div>
-              <label className="mb-1 block text-sm font-medium">Upload Resume (PDF/DOC)</label>
+              <label className="mb-1 block text-sm font-medium">{t("auth.uploadResume")}</label>
               <input
                 type="file"
                 accept=".pdf,.doc,.docx"
@@ -122,13 +124,13 @@ export default function Register() {
               />
             </div>
             <Button type="submit" disabled={loading} className="w-full rounded-full cursor-pointer">
-              {loading ? "Creating…" : "Register"}
+              {loading ? t("auth.registering") : t("auth.registerButton")}
             </Button>
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
+            {t("auth.alreadyHaveAccount")}{" "}
             <Link href="/auth/login" className="text-primary underline">
-              Login
+              {t("auth.loginLink")}
             </Link>
           </p>
         </div>

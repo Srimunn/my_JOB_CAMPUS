@@ -21,6 +21,7 @@ import {
   Bookmark,
 } from "lucide-react";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { useTranslation } from "@/lib/i18n";
 
 // Custom SVGs for blog illustrations (reused from main list for consistency)
 function BlogIllustration({ category, title }: { category: string; title: string }) {
@@ -323,6 +324,7 @@ interface PageProps {
 }
 
 export default function BlogPostDetail({ params }: PageProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
@@ -363,13 +365,11 @@ export default function BlogPostDetail({ params }: PageProps) {
       <SiteLayout>
         <div className="mx-auto max-w-xl text-center py-24 px-4">
           <Bookmark className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-foreground">Article Not Found</h2>
-          <p className="text-sm text-muted-foreground mt-2">
-            The article you are looking for does not exist or has been relocated.
-          </p>
+          <h2 className="text-2xl font-bold text-foreground">{t("career.articleNotFound")}</h2>
+          <p className="text-sm text-muted-foreground mt-2">{t("career.articleNotFoundDesc")}</p>
           <Link href="/career-guidance">
             <button className="mt-6 px-6 py-2.5 bg-primary text-primary-foreground rounded-full text-sm font-bold shadow hover:shadow-md transition-all">
-              Back to Career Guidance
+              {t("career.backButton")}
             </button>
           </Link>
         </div>
@@ -399,7 +399,7 @@ export default function BlogPostDetail({ params }: PageProps) {
             href="/career-guidance"
             className="inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:text-accent/80 transition-colors uppercase tracking-wider mb-6"
           >
-            <ArrowLeft className="h-4 w-4" /> Back to Articles
+            <ArrowLeft className="h-4 w-4" /> {t("career.backToArticles")}
           </Link>
 
           {/* Heading */}
@@ -480,7 +480,7 @@ export default function BlogPostDetail({ params }: PageProps) {
           {/* Share Block */}
           <div className="pt-8 border-t border-border/60 flex flex-wrap items-center justify-between gap-4">
             <span className="text-sm font-bold text-foreground flex items-center gap-2">
-              <Share2 className="h-4 w-4 text-primary" /> Share this article
+              <Share2 className="h-4 w-4 text-primary" /> {t("career.shareTitle")}
             </span>
             <div className="flex gap-2.5 flex-wrap">
               <a
@@ -529,16 +529,13 @@ export default function BlogPostDetail({ params }: PageProps) {
           {/* Leave a Reply section */}
           <div className="pt-10 border-t border-border/60">
             <h3 className="text-xl font-bold text-foreground mb-1 flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-primary" /> Leave a Reply
+              <MessageSquare className="h-5 w-5 text-primary" /> {t("career.replyTitle")}
             </h3>
-            <p className="text-xs text-muted-foreground mb-6">
-              Your email address will not be published. Required fields are marked *
-            </p>
+            <p className="text-xs text-muted-foreground mb-6">{t("career.replySub")}</p>
 
             {submittedComment && (
               <div className="p-4 mb-6 rounded-2xl bg-accent/10 border border-accent/20 text-accent text-sm font-medium flex items-center gap-2">
-                <Send className="h-4 w-4" /> Thank you! Your comment has been successfully submitted
-                and is awaiting moderation.
+                <Send className="h-4 w-4" /> {t("career.commentSuccess")}
               </div>
             )}
 
@@ -548,7 +545,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                   htmlFor="comment"
                   className="block text-xs font-bold text-foreground/80 mb-2 uppercase tracking-wide"
                 >
-                  Comment *
+                  {t("career.commentLabel")}
                 </label>
                 <textarea
                   id="comment"
@@ -556,7 +553,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                   rows={5}
                   value={commentText}
                   onChange={(e) => setCommentText(e.target.value)}
-                  placeholder="Write your comment..."
+                  placeholder={t("career.commentPlaceholder")}
                   className="w-full rounded-2xl border border-border bg-card p-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/60 transition-all"
                 />
               </div>
@@ -567,7 +564,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                     htmlFor="name"
                     className="block text-xs font-bold text-foreground/80 mb-2 uppercase tracking-wide"
                   >
-                    Name *
+                    {t("career.nameLabel")}
                   </label>
                   <div className="relative">
                     <input
@@ -588,7 +585,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                     htmlFor="email"
                     className="block text-xs font-bold text-foreground/80 mb-2 uppercase tracking-wide"
                   >
-                    Email *
+                    {t("career.emailLabel")}
                   </label>
                   <div className="relative">
                     <input
@@ -609,7 +606,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                     htmlFor="website"
                     className="block text-xs font-bold text-foreground/80 mb-2 uppercase tracking-wide"
                   >
-                    Website
+                    {t("career.websiteLabel")}
                   </label>
                   <div className="relative">
                     <input
@@ -637,7 +634,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                   htmlFor="save-info"
                   className="text-xs text-muted-foreground/90 leading-tight select-none cursor-pointer"
                 >
-                  Save my name, email, and website in this browser for the next time I comment.
+                  {t("career.saveInfo")}
                 </label>
               </div>
 
@@ -645,7 +642,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                 type="submit"
                 className="mt-4 px-8 py-3 bg-accent text-accent-foreground rounded-full text-xs font-bold flex items-center gap-1.5 hover:bg-accent/90 shadow-sm hover:shadow-md transition-all cursor-pointer"
               >
-                Submit Comment <Send className="h-3.5 w-3.5" />
+                {t("career.submitComment")} <Send className="h-3.5 w-3.5" />
               </button>
             </form>
           </div>
@@ -668,17 +665,15 @@ export default function BlogPostDetail({ params }: PageProps) {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h3 className="text-2xl font-extrabold tracking-tight text-foreground">
-                  Related Articles
+                  {t("career.relatedTitle")}
                 </h3>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Browse the latest career advices
-                </p>
+                <p className="text-sm text-muted-foreground mt-1">{t("career.relatedSub")}</p>
               </div>
               <Link
                 href="/career-guidance"
                 className="text-xs font-bold text-accent hover:text-accent/80 flex items-center gap-1 uppercase tracking-wider transition-colors"
               >
-                View all articles <ChevronRight className="h-4 w-4" />
+                {t("career.viewAll")} <ChevronRight className="h-4 w-4" />
               </Link>
             </div>
 
@@ -704,7 +699,7 @@ export default function BlogPostDetail({ params }: PageProps) {
                       href={`/career-guidance/${relPost.slug}`}
                       className="text-xs font-bold text-accent mt-4 inline-flex items-center gap-0.5 hover:text-accent/80"
                     >
-                      Read more{" "}
+                      {t("career.readMore")}{" "}
                       <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 duration-200" />
                     </Link>
                   </div>

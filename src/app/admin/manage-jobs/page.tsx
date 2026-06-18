@@ -6,7 +6,7 @@ import { DashboardShell } from "@/components/site/DashboardShell";
 import { adminNav } from "@/lib/dashboard-nav";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Trash2, ExternalLink } from "lucide-react";
+import { Trash2, ExternalLink, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
 export default function Manage() {
@@ -64,6 +64,11 @@ export default function Manage() {
                   <Link href={`/job/${j.id}`}>
                     <Button variant="outline" size="sm" className="cursor-pointer">
                       <ExternalLink className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Link href={`/admin/edit-job/${j.id}`}>
+                    <Button variant="outline" size="sm" className="cursor-pointer">
+                      <Pencil className="h-4 w-4" />
                     </Button>
                   </Link>
                   <Button

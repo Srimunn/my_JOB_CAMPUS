@@ -6,6 +6,7 @@ import Image from "next/image";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Check, Compass, Target, Star } from "lucide-react";
+import { useTranslation } from "@/lib/i18n";
 
 // Image Assets
 import aboutHeroImg from "@/assets/about_hero.png";
@@ -15,24 +16,26 @@ import offerNewsImg from "@/assets/offer_news.png";
 import offerAffairsImg from "@/assets/offer_affairs.png";
 
 export default function About() {
+  const { t } = useTranslation();
+
   const testimonials = [
     {
       initials: "ST",
       name: "Swetha Trivedi",
-      location: "Delhi",
-      text: "My Job Campus made my job search so much easier. With personalised job recommendations and constant updates, I found the perfect role faster than I expected. I truly appreciate how they connect candidates with top employers.",
+      location: t("about.testimonials.stLocation"),
+      text: t("about.testimonials.stText"),
     },
     {
       initials: "PP",
       name: "Pratima Pareek",
-      location: "Bengaluru",
-      text: "My Job Campus has been a game-changer in my job search. The platform connects me with relevant opportunities and provides valuable career insights.",
+      location: t("about.testimonials.ppLocation"),
+      text: t("about.testimonials.ppText"),
     },
     {
       initials: "VP",
       name: "Vijay Prabhakar",
-      location: "Chennai",
-      text: "Every day at My Job Campus, I feel inspired by the opportunities and support provided. The platform’s innovative approach has made a real difference.",
+      location: t("about.testimonials.vpLocation"),
+      text: t("about.testimonials.vpText"),
     },
   ];
 
@@ -191,7 +194,7 @@ export default function About() {
         />
         <div className="absolute inset-0 bg-[#0f172a]/60" />
         <h1 className="relative z-10 text-center font-display text-4xl md:text-5xl lg:text-6xl font-extrabold text-white max-w-4xl px-4 tracking-tight leading-tight">
-          We help you find the right job!
+          {t("about.heroTitle")}
         </h1>
       </section>
 
@@ -199,12 +202,11 @@ export default function About() {
       <section className="mx-auto max-w-6xl px-4 py-20 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
           <h2 className="font-display text-4xl font-extrabold text-[#1e293b] tracking-tight relative inline-block">
-            About Us
+            {t("about.title")}
             <div className="absolute left-1/2 -translate-x-1/2 bottom-[-10px] w-20 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
           </h2>
           <p className="mt-6 text-base md:text-lg text-muted-foreground leading-relaxed">
-            Connecting Talent with Opportunity – Empowering Your Career Journey Every Step of the
-            Way.
+            {t("about.subtitle")}
           </p>
         </div>
 
@@ -217,17 +219,14 @@ export default function About() {
                 <Compass className="h-6 w-6" />
               </div>
               <h3 className="font-display text-2xl font-bold text-[#1e293b]">
-                Welcome to My Job Campus
+                {t("about.welcome")}
               </h3>
               <p className="mt-4 text-sm md:text-base text-foreground/75 leading-relaxed text-justify">
-                Welcome to <span className="font-bold text-foreground">My Job Campus</span> – your
-                go-to platform for the latest job updates, educational news, and current affairs.
-                Our mission is simple: to keep you informed and help you stay ahead in your career
-                journey.
+                {t("about.welcomeText")}
               </p>
             </div>
             <div className="mt-8 text-xs font-semibold text-emerald-700 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-              Empowering talent worldwide ✦
+              {t("about.welcomeFooter")}
             </div>
           </div>
 
@@ -238,17 +237,13 @@ export default function About() {
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-teal-50 text-teal-600 mb-6 shadow-sm border border-teal-100 group-hover:scale-110 transition-transform duration-300">
                 <Target className="h-6 w-6" />
               </div>
-              <h3 className="font-display text-2xl font-bold text-[#1e293b]">Why My Job Campus?</h3>
+              <h3 className="font-display text-2xl font-bold text-[#1e293b]">{t("about.why")}</h3>
               <p className="mt-4 text-sm md:text-base text-foreground/75 leading-relaxed text-justify">
-                Finding the right job opportunities and staying updated with educational trends can
-                be overwhelming. My Job Campus simplifies this by bringing you timely,
-                well-researched updates—all in one place. Whether you’re a student, a job seeker, or
-                someone looking to switch careers, we ensure you never miss an important
-                opportunity.
+                {t("about.whyText")}
               </p>
             </div>
             <div className="mt-8 text-xs font-semibold text-teal-700 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-              Simplifying your career path ✦
+              {t("about.whyFooter")}
             </div>
           </div>
         </div>
@@ -276,40 +271,40 @@ export default function About() {
               {/* Overlapping Stats Badges (visible on md+) */}
               <div className="hidden md:block">
                 {/* Badge 1 */}
-                <div className="absolute -right-16 top-[15%] w-[210px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
+                <div className="absolute -right-20 xl:-right-24 top-[15%] w-[240px] xl:w-[265px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
                   <div className="font-display text-3xl font-extrabold text-[#111827]">130</div>
                   <div className="text-left">
                     <div className="text-xs font-extrabold text-[#111827] leading-none">
-                      Job Offers
+                      {t("about.stats.jobOffers")}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5 leading-none">
-                      Across Different Industries
+                      {t("about.stats.jobOffersDesc")}
                     </div>
                   </div>
                 </div>
 
                 {/* Badge 2 */}
-                <div className="absolute -right-22 top-[44%] w-[210px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
+                <div className="absolute -right-26 xl:-right-30 top-[44%] w-[240px] xl:w-[265px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
                   <div className="font-display text-3xl font-extrabold text-[#111827]">100+</div>
                   <div className="text-left">
                     <div className="text-xs font-extrabold text-[#111827] leading-none">
-                      Active Employers
+                      {t("about.stats.activeEmployers")}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5 leading-none">
-                      Connect with Top Companies
+                      {t("about.stats.activeEmployersDesc")}
                     </div>
                   </div>
                 </div>
 
                 {/* Badge 3 */}
-                <div className="absolute -right-16 top-[73%] w-[210px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
+                <div className="absolute -right-20 xl:-right-24 top-[73%] w-[240px] xl:w-[265px] bg-white rounded-2xl p-4 shadow-xl border border-border/40 flex items-center gap-4 transition-all duration-300 hover:translate-x-2 z-20">
                   <div className="font-display text-3xl font-extrabold text-[#111827]">80+</div>
                   <div className="text-left">
                     <div className="text-xs font-extrabold text-[#111827] leading-none">
-                      Career Resources
+                      {t("about.stats.careerResources")}
                     </div>
                     <div className="text-[10px] text-muted-foreground mt-0.5 leading-none">
-                      Tips, Guides and Insights
+                      {t("about.stats.careerResourcesDesc")}
                     </div>
                   </div>
                 </div>
@@ -321,26 +316,34 @@ export default function About() {
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-border flex items-center gap-4">
                 <div className="font-display text-3xl font-extrabold text-[#111827]">130</div>
                 <div className="text-left">
-                  <div className="text-xs font-bold text-foreground">Job Offers</div>
+                  <div className="text-xs font-bold text-foreground">
+                    {t("about.stats.jobOffers")}
+                  </div>
                   <div className="text-[10px] text-muted-foreground">
-                    Across Different Industries
+                    {t("about.stats.jobOffersDesc")}
                   </div>
                 </div>
               </div>
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-border flex items-center gap-4">
                 <div className="font-display text-3xl font-extrabold text-[#111827]">100+</div>
                 <div className="text-left">
-                  <div className="text-xs font-bold text-foreground">Active Employers</div>
+                  <div className="text-xs font-bold text-foreground">
+                    {t("about.stats.activeEmployers")}
+                  </div>
                   <div className="text-[10px] text-muted-foreground">
-                    Connect with Top Companies
+                    {t("about.stats.activeEmployersDesc")}
                   </div>
                 </div>
               </div>
               <div className="bg-white rounded-2xl p-4 shadow-sm border border-border flex items-center gap-4">
                 <div className="font-display text-3xl font-extrabold text-[#111827]">80+</div>
                 <div className="text-left">
-                  <div className="text-xs font-bold text-foreground">Career Resources</div>
-                  <div className="text-[10px] text-muted-foreground">Tips, Guides and Insights</div>
+                  <div className="text-xs font-bold text-foreground">
+                    {t("about.stats.careerResources")}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground">
+                    {t("about.stats.careerResourcesDesc")}
+                  </div>
                 </div>
               </div>
             </div>
@@ -349,37 +352,32 @@ export default function About() {
           {/* Right Side: Who's Behind Copy and Checklist */}
           <div className="lg:col-span-7 lg:pl-10 text-left">
             <h2 className="font-display text-3xl md:text-4xl font-extrabold text-[#1e293b] leading-tight">
-              Who’s Behind My Job Campus?
+              {t("about.behindTitle")}
             </h2>
             <p className="mt-5 text-base text-foreground/80 leading-relaxed">
-              Hrithik, a Civil Engineer turned Digital Marketer with a passion for writing and
-              social media management, created My Job Campus to provide an end-to-end guide for job
-              seekers—helping you navigate job applications, exams, and industry trends
-              effortlessly.
+              {t("about.behindText")}
             </p>
 
             {/* Checklist */}
             <ul className="mt-8 space-y-4">
-              {[
-                "Bookmark this page for daily updates.",
-                "Follow us on social media for quick alerts.",
-                "Subscribe to never miss an opportunity!",
-              ].map((bullet, idx) => (
-                <li
-                  key={idx}
-                  className="flex items-center gap-3.5 text-base font-semibold text-foreground/90"
-                >
-                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
-                    <Check className="h-3.5 w-3.5 stroke-[3]" />
-                  </span>
-                  <span>{bullet}</span>
-                </li>
-              ))}
+              {[t("about.behindBullet1"), t("about.behindBullet2"), t("about.behindBullet3")].map(
+                (bullet, idx) => (
+                  <li
+                    key={idx}
+                    className="flex items-center gap-3.5 text-base font-semibold text-foreground/90"
+                  >
+                    <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100 shadow-sm">
+                      <Check className="h-3.5 w-3.5 stroke-[3]" />
+                    </span>
+                    <span>{bullet}</span>
+                  </li>
+                ),
+              )}
             </ul>
 
             <Link href="/jobs">
               <Button className="mt-10 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-8 py-6 shadow-md hover:shadow-lg transition-all flex items-center gap-2 cursor-pointer">
-                Get Started Now <ChevronRight className="h-4.5 w-4.5" />
+                {t("about.behindButton")} <ChevronRight className="h-4.5 w-4.5" />
               </Button>
             </Link>
           </div>
@@ -390,7 +388,7 @@ export default function About() {
       <section className="bg-slate-50/30 border-t border-border/80 py-24">
         <div className="mx-auto max-w-6xl px-4 lg:px-8 text-center">
           <h2 className="font-display text-4xl font-extrabold text-[#1e293b] tracking-tight mb-14">
-            What We Offer
+            {t("about.offerTitle")}
           </h2>
 
           <div className="grid gap-8 md:grid-cols-3 text-left">
@@ -407,18 +405,17 @@ export default function About() {
               <div className="p-6 flex flex-col flex-1 justify-between">
                 <div>
                   <h3 className="font-display text-xl font-bold text-foreground">
-                    Latest Job Openings
+                    {t("about.offer1Title")}
                   </h3>
                   <p className="mt-2 text-sm text-foreground/70 leading-relaxed">
-                    Get real-time job alerts across the country from various industries - tailored
-                    to your preferences.
+                    {t("about.offer1Desc")}
                   </p>
                 </div>
                 <Link
                   href="/jobs"
                   className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
                 >
-                  Read more <ChevronRight className="h-4 w-4" />
+                  {t("about.offerReadMore")} <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -433,20 +430,20 @@ export default function About() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-6 flex flex-col flex-1 justify-between">
+              <div className="p-6 flex flex-col flex-grow justify-between">
                 <div>
                   <h3 className="font-display text-xl font-bold text-foreground">
-                    Educational News
+                    {t("about.offer2Title")}
                   </h3>
                   <p className="mt-2 text-sm text-foreground/70 leading-relaxed">
-                    Stay informed about academic updates, scholarships, and government schemes.
+                    {t("about.offer2Desc")}
                   </p>
                 </div>
                 <Link
                   href="/govt-jobs"
                   className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
                 >
-                  Read more <ChevronRight className="h-4 w-4" />
+                  {t("about.offerReadMore")} <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -461,21 +458,20 @@ export default function About() {
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
-              <div className="p-6 flex flex-col flex-1 justify-between">
+              <div className="p-6 flex flex-col flex-grow justify-between">
                 <div>
                   <h3 className="font-display text-xl font-bold text-foreground">
-                    Current Affairs
+                    {t("about.offer3Title")}
                   </h3>
                   <p className="mt-2 text-sm text-foreground/70 leading-relaxed">
-                    Stay up-to-date with news and trends that directly impact your career growth and
-                    development.
+                    {t("about.offer3Desc")}
                   </p>
                 </div>
                 <Link
                   href="/career-guidance"
                   className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-emerald-700 hover:text-emerald-800 transition-colors"
                 >
-                  Read more <ChevronRight className="h-4 w-4" />
+                  {t("about.offerReadMore")} <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
             </div>
@@ -491,10 +487,10 @@ export default function About() {
         <div className="mx-auto max-w-6xl px-4 lg:px-8 relative z-10">
           <div className="text-center max-w-2xl mx-auto mb-16">
             <h2 className="font-display text-4xl font-extrabold text-[#1e293b] tracking-tight relative inline-block">
-              Why Customers Love Us
+              {t("about.testimonialsTitle")}
               <div className="absolute left-1/2 -translate-x-1/2 bottom-[-10px] w-20 h-1 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full" />
             </h2>
-            <p className="mt-6 text-base text-muted-foreground">What our customers say about us</p>
+            <p className="mt-6 text-base text-muted-foreground">{t("about.testimonialsSub")}</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">

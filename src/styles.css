@@ -63,8 +63,12 @@
   --color-hero-blue-deep: var(--hero-blue-deep);
   --color-whatsapp: var(--whatsapp);
   --color-instagram: var(--instagram);
-  --font-display: "Outfit", "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
-  --font-sans: "Outfit", "Inter", system-ui, sans-serif;
+  --font-display:
+    "Outfit", "Plus Jakarta Sans", "Inter", "Noto Sans Devanagari", "Noto Sans Tamil",
+    "Noto Sans Telugu", "Noto Sans Malayalam", "Noto Sans", system-ui, sans-serif;
+  --font-sans:
+    "Outfit", "Inter", "Noto Sans Devanagari", "Noto Sans Tamil", "Noto Sans Telugu",
+    "Noto Sans Malayalam", "Noto Sans", system-ui, sans-serif;
   --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-float: float 6s ease-in-out infinite;
   --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
@@ -73,27 +77,27 @@
 :root {
   --radius: 0.625rem;
   /* My Job Campus palette */
-  --background: oklch(0.985 0.012 85);          /* cream #fbf6ec */
-  --foreground: oklch(0.22 0.05 260);           /* dark navy */
+  --background: oklch(0.985 0.012 85); /* cream #fbf6ec */
+  --foreground: oklch(0.22 0.05 260); /* dark navy */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.22 0.05 260);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.22 0.05 260);
-  --primary: oklch(0.32 0.10 255);              /* deep navy */
+  --primary: oklch(0.32 0.1 255); /* deep navy */
   --primary-foreground: oklch(0.985 0.012 85);
   --secondary: oklch(0.96 0.02 85);
   --secondary-foreground: oklch(0.22 0.05 260);
   --muted: oklch(0.94 0.015 90);
   --muted-foreground: oklch(0.45 0.03 260);
-  --accent: oklch(0.72 0.18 145);               /* green search btn */
+  --accent: oklch(0.72 0.18 145); /* green search btn */
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(1 0 0);
   --border: oklch(0.88 0.02 90);
   --input: oklch(0.92 0.015 90);
   --ring: oklch(0.55 0.12 255);
-  --hero-blue: oklch(0.55 0.18 245);            /* bright blue hero block */
-  --hero-blue-deep: oklch(0.40 0.14 250);
+  --hero-blue: oklch(0.55 0.18 245); /* bright blue hero block */
+  --hero-blue-deep: oklch(0.4 0.14 250);
   --whatsapp: oklch(0.72 0.18 145);
   --instagram: oklch(0.62 0.22 25);
   --shadow-soft: 0 10px 30px -12px oklch(0.22 0.05 260 / 0.18);
@@ -159,7 +163,10 @@
     font-size: 1.025rem;
     -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -179,7 +186,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -188,12 +196,22 @@
 }
 
 @keyframes float-slow {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-15px) rotate(2.5deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-15px) rotate(2.5deg);
+  }
 }
 @keyframes float-fast {
-  0%, 100% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-2deg);
+  }
 }
 .animate-float-slow {
   animation: float-slow 8s ease-in-out infinite;
@@ -203,7 +221,8 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.5;
     transform: scale(1);
   }
@@ -251,7 +270,7 @@
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 
+  box-shadow:
     0 4px 30px rgba(0, 0, 0, 0.03),
     inset 0 1px 1px rgba(255, 255, 255, 0.8),
     inset 0 -1px 2px rgba(0, 0, 0, 0.02);
@@ -262,7 +281,7 @@
   backdrop-filter: blur(20px) saturate(160%);
   -webkit-backdrop-filter: blur(20px) saturate(160%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 4px 30px rgba(0, 0, 0, 0.2),
     inset 0 1px 0px rgba(255, 255, 255, 0.15),
     inset 0 -1px 2px rgba(0, 0, 0, 0.4);
@@ -304,8 +323,12 @@
 
 /* Keyframes & Animations */
 @keyframes slideLoop {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }
 
 .animate-slide-loop {
@@ -317,8 +340,14 @@
 }
 
 @keyframes morph-check {
-  0% { transform: scale(0.6) rotate(-20deg); opacity: 0; }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  0% {
+    transform: scale(0.6) rotate(-20deg);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
 }
 
 .animate-morph-check {
@@ -326,12 +355,16 @@
 }
 
 @keyframes pop-in {
-  0% { transform: scale(0.9) translateY(4px); opacity: 0; }
-  100% { transform: scale(1) translateY(0); opacity: 1; }
+  0% {
+    transform: scale(0.9) translateY(4px);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
 }
 
 .animate-pop-in {
   animation: pop-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
-

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslation } from "@/lib/i18n";
 
 interface Company {
   name: string;
@@ -12,6 +13,7 @@ type CompaniesListProps = {
 };
 
 export const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
+  const { t } = useTranslation();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
       {companies.map((company, idx) => (
@@ -24,7 +26,8 @@ export const CompaniesList: React.FC<CompaniesListProps> = ({ companies }) => {
               {company.name}
             </h3>
             <p className="text-muted-foreground mt-2">
-              {company.jobs} {company.jobs === 1 ? "job" : "jobs"}
+              {company.jobs}{" "}
+              {company.jobs === 1 ? t("companies.jobSingle") : t("companies.jobPlural")}
             </p>
           </div>
         </article>

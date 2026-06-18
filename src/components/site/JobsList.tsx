@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CATEGORIES, CITIES } from "@/lib/data";
 import { Search, Globe, Folder, ChevronDown, ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/lib/i18n";
 
 const STATIC_EMPLOYMENT_TYPES = [
   { name: "Apprenticeship", count: 0 },
@@ -59,6 +60,7 @@ export function JobsList({
   subtitle: string;
   forcedCategory?: string;
 }) {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
 
   const [q, setQ] = useState("");
@@ -212,7 +214,7 @@ export function JobsList({
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Job Title or Keyword"
+              placeholder={t("jobs.searchPlaceholder")}
               className="w-full bg-transparent text-sm py-1.5 focus:outline-none placeholder:text-muted-foreground/60 border-none outline-none text-foreground"
             />
           </div>
@@ -229,7 +231,7 @@ export function JobsList({
                 onChange={(e) => setLoc(e.target.value)}
                 className="w-full bg-transparent text-sm py-1.5 pr-8 appearance-none focus:outline-none cursor-pointer border-none outline-none text-foreground/85"
               >
-                <option value="">All Locations</option>
+                <option value="">{t("jobs.allLocations")}</option>
                 {CITIES.map((c) => (
                   <option key={c.name} value={c.name}>
                     {c.name}
@@ -252,7 +254,7 @@ export function JobsList({
                 onChange={(e) => setCat(e.target.value)}
                 className="w-full bg-transparent text-sm py-1.5 pr-8 appearance-none focus:outline-none cursor-pointer border-none outline-none text-foreground/85"
               >
-                <option value="">All Categories</option>
+                <option value="">{t("jobs.allCategories")}</option>
                 {categoriesList.map((cName) => (
                   <option key={cName} value={cName}>
                     {cName}
@@ -265,14 +267,14 @@ export function JobsList({
 
           {/* Action Button */}
           <Button className="rounded-full bg-green-600 hover:bg-green-700 text-white px-7 py-2.5 text-sm font-semibold shadow-sm hover:shadow-md transition-all shrink-0 w-full md:w-auto cursor-pointer">
-            Find Jobs
+            {t("jobs.findButton")}
           </Button>
         </div>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[260px_1fr]">
           <aside className="space-y-6">
             <FilterGroup
-              label="Type of Employment"
+              label={t("jobs.employmentType")}
               onClear={selectedTypes.length > 0 ? () => setSelectedTypes([]) : undefined}
             >
               <div className="flex flex-col gap-2.5">
@@ -304,7 +306,7 @@ export function JobsList({
             </FilterGroup>
 
             <FilterGroup
-              label="Experience Level"
+              label={t("jobs.experienceLevel")}
               onClear={selectedExps.length > 0 ? () => setSelectedExps([]) : undefined}
             >
               <div className="flex flex-col gap-2.5">
@@ -340,8 +342,18 @@ export function JobsList({
             {/* Header: Showing X jobs & Sort Dropdown */}
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-base font-bold text-[#0d1b3e]">
-                Showing <span className="text-[#006A00] font-extrabold">{sortedJobs.length}</span>{" "}
-                {sortedJobs.length === 1 ? "job" : "jobs"}
+                {(() => {
+                  const text =
+                    sortedJobs.length === 1 ? t("jobs.showingSingle") : t("jobs.showingPlural");
+                  const parts = text.split("{count}");
+                  return (
+                    <>
+                      {parts[0]}
+                      <span className="text-[#006A00] font-extrabold">{sortedJobs.length}</span>
+                      {parts[1]}
+                    </>
+                  );
+                })()}
               </h2>
 
               <div className="flex items-center gap-1 bg-card border border-border/60 rounded-xl px-3 py-1.5 shadow-sm hover:shadow-md transition-all">
@@ -351,8 +363,8 @@ export function JobsList({
                   onChange={(e) => setSortBy(e.target.value as "newest" | "oldest")}
                   className="text-xs font-bold bg-transparent border-none focus:outline-none cursor-pointer text-[#0d1b3e]"
                 >
-                  <option value="newest">Newest</option>
-                  <option value="oldest">Oldest</option>
+                  <option value="newest">{t("jobs.newest")}</option>
+                  <option value="oldest">{t("jobs.oldest")}</option>
                 </select>
               </div>
             </div>
@@ -360,11 +372,11 @@ export function JobsList({
             {isLoading ? (
               <div className="text-muted-foreground flex items-center justify-center p-12">
                 <span className="flex h-5 w-5 rounded-full border-2 border-primary border-t-transparent animate-spin mr-3" />
-                Loading jobs…
+                {t("jobs.loading")}
               </div>
             ) : visible.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-border bg-card/50 p-12 text-center text-muted-foreground animate-fade-in-up">
-                No jobs match your filters yet.
+                {t("jobs.noResults")}
               </div>
             ) : (
               <div className="grid gap-6 md:grid-cols-2">
@@ -402,6 +414,7 @@ function FilterGroup({
   children: React.ReactNode;
   onClear?: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="rounded-2xl border border-border/60 bg-card/75 p-5 shadow-sm backdrop-blur-sm transition-all duration-300 hover:shadow-md hover:border-primary/10">
       <div className="mb-3.5 flex items-center justify-between">
@@ -411,7 +424,7 @@ function FilterGroup({
             onClick={onClear}
             className="text-xs text-[#006A00] font-bold hover:underline transition-all cursor-pointer"
           >
-            Clear
+            {t("jobs.clear")}
           </button>
         )}
       </div>

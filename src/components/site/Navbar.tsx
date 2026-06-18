@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import Image from "next/image";
 import logo from "@/assets/logo.jpg";
+import { useTranslation } from "@/lib/i18n";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 const NAV = [
   { to: "/", label: "Home" },
@@ -24,29 +26,44 @@ const NAV = [
   { to: "/career-guidance", label: "Career Guidance" },
 ] as const;
 
+const NAV_KEYS: Record<string, string> = {
+  "/": "nav.home",
+  "/about": "nav.aboutUs",
+  "/companies": "nav.companies",
+  "/jobs": "nav.freeJobsAlert",
+  "/govt-jobs": "nav.govtJobAlerts",
+  "/career-guidance": "nav.careerGuidance",
+};
+
 export function Navbar() {
   const { user, role, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { t, currentLanguage } = useTranslation();
+  const isLongLang = currentLanguage === "ta" || currentLanguage === "ml";
 
   return (
     <header className="sticky top-0 z-40 border-b-[10px] border-white bg-white text-foreground shadow-sm rounded-b-lg transition-all duration-300">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 lg:px-8">
+      <div
+        className={`mx-auto flex h-16 max-w-7xl items-center justify-between ${isLongLang ? "px-1.5 lg:px-3 xl:px-4" : "px-4 lg:px-8"}`}
+      >
         <Link
           href="/"
-          className="group flex items-center gap-2.5 font-display text-xl font-extrabold text-foreground"
+          className="group flex items-center gap-2.5 font-display text-xl font-extrabold text-foreground flex-shrink-0"
         >
           <Image
             src={logo}
             alt="My Job Campus logo"
             width={160}
             height={160}
-            className="object-contain mt-[50px]"
+            className={`object-contain mt-[50px] h-auto ${isLongLang ? "w-[115px] xl:w-[135px]" : "w-[130px] xl:w-[160px]"}`}
             priority
           />
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex translate-y-[3px]">
+        <nav
+          className={`hidden items-center ${isLongLang ? "gap-1 xl:gap-2.5" : "gap-2.5 xl:gap-5"} xl:flex translate-y-[3px] min-w-0 flex-shrink`}
+        >
           {NAV.map((n) => {
             const active =
               (n.to as string) === "/"
@@ -56,62 +73,76 @@ export function Navbar() {
               <Link
                 key={n.to}
                 href={n.to}
-                className={`text-sm font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] hover:scale-105 ${active ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
+                className={`font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] hover:scale-105 whitespace-nowrap ${isLongLang ? "text-[10.5px] xl:text-[12.5px]" : "text-xs xl:text-sm"} ${active ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
               >
-                {n.label}
+                {t(NAV_KEYS[n.to])}
               </Link>
             );
           })}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition-all duration-200 hover:text-primary hover:translate-y-[-1px] cursor-pointer">
-              Resources <ChevronDown className="h-4 w-4" />
+            <DropdownMenuTrigger
+              className={`flex items-center gap-1 font-medium text-foreground/80 transition-all duration-200 hover:text-primary hover:translate-y-[-1px] cursor-pointer whitespace-nowrap ${isLongLang ? "text-[10.5px] xl:text-[12.5px]" : "text-xs xl:text-sm"}`}
+            >
+              {t("nav.resources")} <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="rounded-xl border border-border shadow-lg">
               <DropdownMenuItem asChild>
                 <Link href="/privacy" className="cursor-pointer w-full block">
-                  Privacy Policy
+                  {t("nav.privacyPolicy")}
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/terms" className="cursor-pointer w-full block">
-                  Terms & Conditions
+                  {t("nav.termsConditions")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <Link
             href="/contact"
-            className={`text-sm font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] ${pathname === "/contact" ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
+            className={`font-medium transition-all duration-200 hover:text-primary hover:translate-y-[-1px] whitespace-nowrap ${isLongLang ? "text-[10.5px] xl:text-[12.5px]" : "text-xs xl:text-sm"} ${pathname === "/contact" ? "text-primary font-semibold border-b-2 border-primary pb-0.5" : "text-foreground/80"}`}
           >
-            Contact Us
+            {t("nav.contactUs")}
           </Link>
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div
+          className={`hidden items-center ${isLongLang ? "gap-1 xl:gap-2" : "gap-2.5 xl:gap-4"} xl:flex flex-shrink-0`}
+        >
+          <LanguageSwitcher />
           {user ? (
             <>
               <Link href={role === "admin" ? "/admin" : "/seeker"}>
                 <Button
                   variant="outline"
-                  className="rounded-full shadow-sm hover:shadow-md transition-all duration-300"
+                  size={isLongLang ? "sm" : "default"}
+                  className={`rounded-full shadow-sm hover:shadow-md transition-all duration-300 ${isLongLang ? "text-[10px] xl:text-[12px] px-2" : "text-xs xl:text-sm"}`}
                 >
-                  Dashboard
+                  {t("nav.dashboard")}
                 </Button>
               </Link>
-              <Button onClick={signOut} variant="ghost" className="rounded-full hover:bg-muted/80">
-                Sign out
+              <Button
+                onClick={signOut}
+                variant="ghost"
+                size={isLongLang ? "sm" : "default"}
+                className={`rounded-full hover:bg-muted/80 ${isLongLang ? "text-[10px] xl:text-[12px] px-2" : "text-xs xl:text-sm"}`}
+              >
+                {t("nav.signOut")}
               </Button>
             </>
           ) : (
             <Link href="/auth/login">
-              <Button className="rounded-full px-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
-                Sign in
+              <Button
+                size={isLongLang ? "sm" : "default"}
+                className={`rounded-full shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer ${isLongLang ? "px-2.5 xl:px-3 text-[10px] xl:text-[12px]" : "px-5 xl:px-6 text-xs xl:text-sm"}`}
+              >
+                {t("nav.signIn")}
               </Button>
             </Link>
           )}
         </div>
 
-        <button className="lg:hidden" onClick={() => setOpen((v) => !v)} aria-label="Menu">
+        <button className="xl:hidden" onClick={() => setOpen((v) => !v)} aria-label="Menu">
           {open ? <X /> : <Menu />}
         </button>
       </div>
@@ -125,7 +156,10 @@ export function Navbar() {
           >
             <X className="h-6 w-6" />
           </button>
-          <nav className="flex flex-col gap-4 items-center">
+          <nav className="flex flex-col gap-4 items-center animate-fade-in-up">
+            <div className="mb-4">
+              <LanguageSwitcher />
+            </div>
             {NAV.map((n) => (
               <Link
                 key={n.to}
@@ -133,7 +167,7 @@ export function Navbar() {
                 onClick={() => setOpen(false)}
                 className="text-lg font-medium text-foreground hover:text-primary transition-colors"
               >
-                {n.label}
+                {t(NAV_KEYS[n.to])}
               </Link>
             ))}
             <Link
@@ -141,21 +175,21 @@ export function Navbar() {
               onClick={() => setOpen(false)}
               className="text-lg font-medium text-foreground hover:text-primary transition-colors"
             >
-              Privacy Policy
+              {t("nav.privacyPolicy")}
             </Link>
             <Link
               href="/terms"
               onClick={() => setOpen(false)}
               className="text-lg font-medium text-foreground hover:text-primary transition-colors"
             >
-              Terms & Conditions
+              {t("nav.termsConditions")}
             </Link>
             <Link
               href="/contact"
               onClick={() => setOpen(false)}
               className="text-lg font-medium text-foreground hover:text-primary transition-colors"
             >
-              Contact Us
+              {t("nav.contactUs")}
             </Link>
             {user ? (
               <>
@@ -164,7 +198,7 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                 >
-                  Dashboard
+                  {t("nav.dashboard")}
                 </Link>
                 <button
                   onClick={() => {
@@ -173,7 +207,7 @@ export function Navbar() {
                   }}
                   className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                 >
-                  Sign out
+                  {t("nav.signOut")}
                 </button>
               </>
             ) : (
@@ -183,14 +217,14 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                 >
-                  Sign In
+                  {t("nav.signIn")}
                 </Link>
                 <Link
                   href="/auth/register"
                   onClick={() => setOpen(false)}
                   className="text-lg font-medium text-foreground hover:text-primary transition-colors"
                 >
-                  Create Account
+                  {t("auth.createAccount")}
                 </Link>
               </>
             )}

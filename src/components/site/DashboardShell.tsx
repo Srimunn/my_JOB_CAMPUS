@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/assets/logo.jpg";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect } from "react";
@@ -46,12 +48,18 @@ export function DashboardShell({
       <aside className="hidden w-60 shrink-0 flex-col border-r border-border bg-primary text-primary-foreground lg:flex">
         <Link
           href="/"
-          className="flex h-16 items-center gap-2 border-b border-primary-foreground/10 px-5 font-display text-lg font-extrabold"
+          className="flex h-20 items-center justify-center border-b border-primary-foreground/10 px-5"
         >
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary-foreground text-primary">
-            MJ
-          </span>
-          My Job Campus
+          <div className="bg-white rounded-2xl p-1.5 flex items-center justify-center w-full shadow-inner h-12 overflow-hidden">
+            <Image
+              src={logo}
+              alt="My Job Campus logo"
+              width={140}
+              height={36}
+              className="object-contain"
+              priority
+            />
+          </div>
         </Link>
         <nav className="flex-1 space-y-1 p-3">
           {nav.map((n) => {

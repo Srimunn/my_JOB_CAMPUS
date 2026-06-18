@@ -1,18 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import { DashboardShell } from "@/components/site/DashboardShell";
 import { adminNav } from "@/lib/dashboard-nav";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/lib/auth";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES, CITIES, JOB_TYPES, EXPERIENCE_LEVELS } from "@/lib/data";
 import { toast } from "sonner";
 
-export default function AddJob() {
+export default function EditJob() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { id } = useParams() as { id: string };
   const [classification, setClassification] = useState<"IT" | "Govt">("IT");
   const [f, setF] = useState({
     title: "",
@@ -28,7 +28,37 @@ export default function AddJob() {
     apply_link: "",
     apply_email: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [updating, setUpdating] = useState(false);
+
+  const { data: job, isLoading } = useQuery({
+    queryKey: ["admin-job", id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("jobs").select("*").eq("id", id).single();
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  useEffect(() => {
+    if (job) {
+      setF({
+        title: job.title || "",
+        company: job.company || "",
+        category: job.category || "Software Engineer",
+        location: job.location || "Bengaluru",
+        job_type: job.job_type || "Full Time",
+        experience: job.experience || "0-1 years",
+        salary: job.salary || "",
+        last_date: job.last_date || "",
+        description: job.description || "",
+        requirements: job.requirements || "",
+        apply_link: job.apply_link || "",
+        apply_email: job.apply_email || "",
+      });
+      setClassification(job.category === "Government-jobs" ? "Govt" : "IT");
+    }
+  }, [job]);
+
   const set = (k: keyof typeof f) => (v: string) => setF({ ...f, [k]: v });
 
   const handleClassificationChange = (v: "IT" | "Govt") => {
@@ -40,34 +70,56 @@ export default function AddJob() {
     }
   };
 
+  if (isLoading) {
+    return (
+      <DashboardShell title="Edit Job" nav={adminNav} requireRole="admin">
+        <div className="mx-auto max-w-3xl text-center p-10 text-muted-foreground">
+          Loading job details...
+        </div>
+      </DashboardShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <DashboardShell title="Edit Job" nav={adminNav} requireRole="admin">
+        <div className="mx-auto max-w-3xl text-center p-10 text-muted-foreground">
+          Job not found.
+        </div>
+      </DashboardShell>
+    );
+  }
+
   return (
-    <DashboardShell title="Add Job" nav={adminNav} requireRole="admin">
+    <DashboardShell title="Edit Job" nav={adminNav} requireRole="admin">
       <form
         className="mx-auto max-w-3xl space-y-5 rounded-2xl border border-border bg-card p-6"
         onSubmit={async (e) => {
           e.preventDefault();
-          setLoading(true);
-          const { error } = await supabase.from("jobs").insert({
-            title: f.title,
-            company: f.company,
-            category: f.category,
-            location: f.location,
-            job_type: f.job_type,
-            experience: f.experience || null,
-            salary: f.salary || null,
-            last_date: f.last_date || null,
-            description: f.description,
-            requirements: f.requirements || null,
-            apply_link: f.apply_link || null,
-            apply_email: f.apply_email || null,
-            posted_by: user?.id ?? null,
-          });
-          setLoading(false);
+          setUpdating(true);
+          const { error } = await supabase
+            .from("jobs")
+            .update({
+              title: f.title,
+              company: f.company,
+              category: f.category,
+              location: f.location,
+              job_type: f.job_type,
+              experience: f.experience || null,
+              salary: f.salary || null,
+              last_date: f.last_date || null,
+              description: f.description,
+              requirements: f.requirements || null,
+              apply_link: f.apply_link || null,
+              apply_email: f.apply_email || null,
+            })
+            .eq("id", id);
+          setUpdating(false);
           if (error) {
             toast.error(error.message);
             return;
           }
-          toast.success("Job posted!");
+          toast.success("Job updated successfully!");
           router.push("/admin/manage-jobs");
         }}
       >
@@ -158,9 +210,19 @@ export default function AddJob() {
             required={false}
           />
         </div>
-        <Button type="submit" disabled={loading} className="rounded-full cursor-pointer">
-          {loading ? "Posting…" : "Submit"}
-        </Button>
+        <div className="flex gap-3 pt-3">
+          <Button type="submit" disabled={updating} className="rounded-full cursor-pointer">
+            {updating ? "Saving..." : "Save Changes"}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => router.push("/admin/manage-jobs")}
+            className="rounded-full cursor-pointer"
+          >
+            Cancel
+          </Button>
+        </div>
       </form>
     </DashboardShell>
   );
@@ -190,11 +252,12 @@ function Text({
         placeholder={placeholder}
         value={v}
         onChange={(e) => on(e.target.value)}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
       />
     </div>
   );
 }
+
 function Select({
   label,
   v,
@@ -213,7 +276,7 @@ function Select({
         required
         value={v}
         onChange={(e) => on(e.target.value)}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary cursor-pointer"
       >
         {options.map((o) => (
           <option key={o}>{o}</option>
@@ -222,6 +285,7 @@ function Select({
     </div>
   );
 }
+
 function Area({
   label,
   v,
@@ -243,7 +307,7 @@ function Area({
         rows={rows}
         value={v}
         onChange={(e) => on(e.target.value)}
-        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm"
+        className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
       />
     </div>
   );

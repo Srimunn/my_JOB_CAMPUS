@@ -7,6 +7,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { ARTICLES, Article } from "@/lib/data";
 import { Calendar, User, Clock, ArrowRight, BookOpen } from "lucide-react";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
+import { useTranslation } from "@/lib/i18n";
 
 // Category definitions
 const BLOG_CATEGORIES = ["Interview", "Jobs", "Resume", "Tips", "Uncategorized"] as const;
@@ -350,6 +351,7 @@ function BlogIllustration({ category, title }: { category: string; title: string
 }
 
 function CareerGuidanceContent() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -426,7 +428,9 @@ function CareerGuidanceContent() {
         {/* Simple Bold Heading matching mockup */}
         <div className="mb-10">
           <h1 className="font-display text-4xl font-extrabold text-[#0d1b3e] tracking-tight">
-            {selectedTag ? `Tag: ${selectedTag}` : `Category: ${selectedCategory}`}
+            {selectedTag
+              ? `${t("career.tag")}: ${selectedTag}`
+              : `${t("career.category")}: ${selectedCategory}`}
           </h1>
         </div>
 
@@ -475,7 +479,8 @@ function CareerGuidanceContent() {
                           href={`/career-guidance/${article.slug}`}
                           className="text-sm font-bold text-accent hover:underline flex items-center gap-1 transition-colors duration-150"
                         >
-                          Read more <span className="font-sans font-semibold">&gt;</span>
+                          {t("career.readMore")}{" "}
+                          <span className="font-sans font-semibold">&gt;</span>
                         </Link>
                       </div>
                     </div>
@@ -485,10 +490,9 @@ function CareerGuidanceContent() {
             ) : (
               <div className="text-center py-20 rounded-3xl border border-dashed border-border bg-card">
                 <BookOpen className="h-12 w-12 text-muted-foreground/60 mx-auto mb-4" />
-                <h3 className="text-lg font-bold text-foreground">No articles found</h3>
+                <h3 className="text-lg font-bold text-foreground">{t("career.noArticles")}</h3>
                 <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
-                  We couldn't find any articles matching this filter. Try adjusting your search
-                  query or selecting a different category.
+                  {t("career.noArticlesDesc")}
                 </p>
                 <button
                   onClick={() => {
@@ -497,7 +501,7 @@ function CareerGuidanceContent() {
                   }}
                   className="mt-6 px-5 py-2.5 bg-primary text-primary-foreground rounded-full text-xs font-bold shadow hover:shadow-md transition-all"
                 >
-                  Reset Filters
+                  {t("career.resetFilters")}
                 </button>
               </div>
             )}
@@ -534,7 +538,7 @@ function CareerGuidanceContent() {
                     }}
                     className="px-6 py-2.5 bg-accent text-accent-foreground rounded-full text-xs font-bold flex items-center gap-1.5 hover:bg-accent/90 shadow-sm transition-all"
                   >
-                    Show me more <ArrowRight className="h-3.5 w-3.5" />
+                    {t("career.showMore")} <ArrowRight className="h-3.5 w-3.5" />
                   </button>
                 )}
               </div>

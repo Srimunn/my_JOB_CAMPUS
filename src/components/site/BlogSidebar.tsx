@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { ARTICLES } from "@/lib/data";
+import { useTranslation } from "@/lib/i18n";
 
 interface BlogSidebarProps {
   searchQuery?: string;
@@ -25,6 +26,7 @@ export function BlogSidebar({
   setSelectedTag,
   setCurrentPage,
 }: BlogSidebarProps) {
+  const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -157,7 +159,7 @@ export function BlogSidebar({
       {/* 1. Search Articles */}
       <div className="space-y-4">
         <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#0d1b3e]">
-          Search Articles
+          {t("career.searchTitle")}
         </h4>
         <form onSubmit={handleSearchSubmit} className="relative group/search">
           <input
@@ -170,7 +172,7 @@ export function BlogSidebar({
               }
               if (setSearchQuery) setSearchQuery(e.target.value);
             }}
-            placeholder="Search by keyword"
+            placeholder={t("career.searchPlaceholder")}
             className="w-full rounded-full border border-[#e5d8cc] bg-white py-3 pl-5 pr-12 text-sm text-[#0d1b3e] placeholder:text-[#0d1b3e]/40 transition-all duration-300 focus:outline-none focus:border-[#006000] focus:ring-4 focus:ring-[#006000]/10 shadow-sm"
           />
           <button
@@ -185,7 +187,7 @@ export function BlogSidebar({
       {/* 2. Categories */}
       <div className="space-y-4">
         <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#0d1b3e]">
-          Categories
+          {t("career.categoriesTitle")}
         </h4>
         <ul className="space-y-2.5">
           {BLOG_CATEGORIES.map((cat) => {
@@ -214,7 +216,7 @@ export function BlogSidebar({
       {/* 3. Recent Posts */}
       <div className="space-y-4">
         <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#0d1b3e]">
-          Recent Posts
+          {t("career.recentPostsTitle")}
         </h4>
         <ul className="space-y-5">
           {recentPosts.map((post) => (
@@ -235,7 +237,7 @@ export function BlogSidebar({
       {/* 4. Tags Cloud */}
       <div className="space-y-4">
         <h4 className="text-[11px] font-extrabold uppercase tracking-widest text-[#0d1b3e]">
-          Tags
+          {t("career.tagsTitle")}
         </h4>
         <div className="grid grid-cols-3 gap-1.5">
           {["Career", "Future", "Interview", "Job", "Resume", "Tips"].map((tag) => {

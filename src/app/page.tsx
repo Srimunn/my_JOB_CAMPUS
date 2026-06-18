@@ -27,6 +27,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/site/ScrollReveal";
 import handshakeImg from "@/assets/handshake.png";
+import { useTranslation } from "@/lib/i18n";
 
 // Map category names to icons
 const getCategoryIcon = (name: string) => {
@@ -163,12 +164,9 @@ export default function Home() {
     return { ...cat, count };
   });
 
-  const bullets = [
-    "Refine your search by industry, location, and more.",
-    "Find jobs that match your expertise.",
-    "Get the latest job openings instantly",
-    "Discover companies that match your values.",
-  ];
+  const { t } = useTranslation();
+
+  const bullets = [t("hero.bullet1"), t("hero.bullet2"), t("hero.bullet3"), t("hero.bullet4")];
 
   const toggleFaq = (index: number) => {
     setOpenFaq(openFaq === index ? null : index);
@@ -187,50 +185,54 @@ export default function Home() {
         {/* Floating cards for unique animatic layout */}
         <div className="absolute inset-0 pointer-events-none hidden lg:block overflow-hidden">
           {/* Card 1: Left Top */}
-          <div className="absolute left-[6%] top-[20%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-slow flex items-center gap-3 bg-white/70 max-w-[230px]">
+          <div className="absolute left-[6%] top-[20%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-slow flex items-center gap-3 bg-white/70 max-w-[260px]">
             <div className="h-10 w-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-600 shrink-0">
               <ShieldCheck className="h-5 w-5" />
             </div>
             <div className="text-left">
-              <div className="text-xs font-black text-[#1d2951]">Verified Roles</div>
+              <div className="text-xs font-black text-[#1d2951]">{t("hero.verifiedRoles")}</div>
               <div className="text-[10px] text-muted-foreground font-medium">
-                100% Legit Postings
+                {t("hero.legitPostings")}
               </div>
             </div>
           </div>
 
           {/* Card 2: Right Top */}
-          <div className="absolute right-[6%] top-[18%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-fast flex items-center gap-3 bg-white/70 max-w-[230px]">
+          <div className="absolute right-[6%] top-[18%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-fast flex items-center gap-3 bg-white/70 max-w-[260px]">
             <div className="h-10 w-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-600 shrink-0">
               <Laptop className="h-5 w-5" />
             </div>
             <div className="text-left">
-              <div className="text-xs font-black text-[#1d2951]">Remote Friendly</div>
+              <div className="text-xs font-black text-[#1d2951]">{t("hero.remoteFriendly")}</div>
               <div className="text-[10px] text-muted-foreground font-medium">
-                Work from Anywhere
+                {t("hero.anywhere")}
               </div>
             </div>
           </div>
 
           {/* Card 3: Left Bottom */}
-          <div className="absolute left-[10%] bottom-[20%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-fast flex items-center gap-3 bg-white/70 max-w-[230px]">
+          <div className="absolute left-[10%] bottom-[20%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-fast flex items-center gap-3 bg-white/70 max-w-[260px]">
             <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-600 shrink-0">
               <TrendingUp className="h-5 w-5" />
             </div>
             <div className="text-left">
-              <div className="text-xs font-black text-[#1d2951]">98% Success</div>
-              <div className="text-[10px] text-muted-foreground font-medium">Fast-track Hiring</div>
+              <div className="text-xs font-black text-[#1d2951]">{t("hero.success")}</div>
+              <div className="text-[10px] text-muted-foreground font-medium">
+                {t("hero.fastTrack")}
+              </div>
             </div>
           </div>
 
           {/* Card 4: Right Bottom */}
-          <div className="absolute right-[10%] bottom-[22%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-slow flex items-center gap-3 bg-white/70 max-w-[230px]">
+          <div className="absolute right-[10%] bottom-[22%] glass-morphism rounded-2xl p-4 shadow-lg border border-white/20 animate-float-slow flex items-center gap-3 bg-white/70 max-w-[260px]">
             <div className="h-10 w-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-600 shrink-0">
               <Folder className="h-5 w-5" />
             </div>
             <div className="text-left">
-              <div className="text-xs font-black text-[#1d2951]">Top Categories</div>
-              <div className="text-[10px] text-muted-foreground font-medium">Find your niche</div>
+              <div className="text-xs font-black text-[#1d2951]">{t("hero.topCategories")}</div>
+              <div className="text-[10px] text-muted-foreground font-medium">
+                {t("hero.findYourNiche")}
+              </div>
             </div>
           </div>
         </div>
@@ -241,16 +243,15 @@ export default function Home() {
 
           <ScrollReveal animation="fade-in-up" duration={800}>
             <h1 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-foreground lg:text-7xl">
-              Find the perfect{" "}
               <span className="bg-gradient-to-r from-primary via-hero-blue-deep to-primary bg-clip-text text-transparent">
-                job for you
+                {t("hero.title")}
               </span>
             </h1>
           </ScrollReveal>
 
           <ScrollReveal animation="fade-in-up" duration={800} delay={150}>
             <p className="mx-auto mt-6 max-w-xl text-lg text-muted-foreground lg:text-xl">
-              Explore a wide range of opportunities
+              {t("hero.subtitle")}
             </p>
           </ScrollReveal>
 
@@ -279,14 +280,11 @@ export default function Home() {
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <ScrollReveal animation="fade-in-up" duration={800}>
-          <SectionHeader
-            title="Search by Category"
-            subtitle="Find Opportunities in Your Preferred Category"
-          />
+          <SectionHeader title={t("home.categoriesTitle")} subtitle={t("home.categoriesSub")} />
         </ScrollReveal>
 
         <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {dynamicCategories.slice(0, 12).map((c, idx) => {
+          {dynamicCategories.slice(0, 24).map((c, idx) => {
             const Icon = getCategoryIcon(c.name);
             return (
               <ScrollReveal key={c.name} animation="scale-up" duration={600} delay={idx * 50}>
@@ -313,7 +311,7 @@ export default function Home() {
           <div className="mt-10 text-center">
             <Link href="/jobs">
               <Button className="rounded-full bg-accent hover:bg-accent/90 text-white font-bold px-6 py-5 shadow-md hover:shadow-lg transition-all duration-300">
-                All Categories <ArrowRight className="ml-2 h-4 w-4" />
+                {t("home.allCategories")} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -323,10 +321,7 @@ export default function Home() {
       {/* Featured jobs */}
       <section className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <ScrollReveal animation="fade-in-up" duration={800}>
-          <SectionHeader
-            title="Featured Job Offers"
-            subtitle="Search your career through wide-range of opportunities"
-          />
+          <SectionHeader title={t("home.featuredTitle")} subtitle={t("home.featuredSub")} />
         </ScrollReveal>
 
         {displayJobs.length === 0 ? (
@@ -355,7 +350,7 @@ export default function Home() {
           <div className="mt-10 text-center">
             <Link href="/jobs">
               <Button className="rounded-full bg-accent hover:bg-accent/90 text-white font-bold px-6 py-5 shadow-md hover:shadow-lg transition-all duration-300">
-                All Job Offers <ArrowRight className="ml-2 h-4 w-4" />
+                {t("home.allJobs")} <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>
           </div>
@@ -365,14 +360,11 @@ export default function Home() {
       {/* Cities */}
       <section className="mx-auto max-w-7xl px-4 py-16 lg:px-8">
         <ScrollReveal animation="fade-in-up" duration={800}>
-          <SectionHeader
-            title="Featured Cities"
-            subtitle="Start your next career in a city of your choice"
-          />
+          <SectionHeader title={t("home.citiesTitle")} subtitle={t("home.citiesSub")} />
         </ScrollReveal>
 
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-          {dynamicCities.slice(0, 9).map((c, idx) => (
+          {dynamicCities.slice(0, 20).map((c, idx) => (
             <ScrollReveal key={c.name} animation="scale-up" duration={600} delay={idx * 60}>
               <Link
                 href={`/jobs?loc=${encodeURIComponent(c.name)}`}
@@ -425,10 +417,10 @@ export default function Home() {
             <div className="lg:col-span-7 flex flex-col items-start">
               <ScrollReveal animation="slide-in-right" duration={900}>
                 <span className="text-emerald-700 font-bold tracking-wider text-sm mb-3 block uppercase">
-                  Why My Job Campus
+                  {t("home.whySubtitle")}
                 </span>
                 <h2 className="font-display text-2xl font-extrabold text-foreground lg:text-4xl leading-tight mb-8">
-                  Your career. Your future. Your success — made simple.
+                  {t("home.whyTitle")}
                 </h2>
               </ScrollReveal>
 
@@ -485,7 +477,7 @@ export default function Home() {
                 <div className="mt-10">
                   <Link href="/about">
                     <Button className="rounded-full bg-emerald-800 hover:bg-emerald-700 text-white font-bold px-8 py-5 shadow-lg transition-all duration-300">
-                      Know More About Us
+                      {t("home.knowMore")}
                     </Button>
                   </Link>
                 </div>
@@ -500,7 +492,7 @@ export default function Home() {
         <ScrollReveal animation="fade-in-up" duration={800}>
           <div className="mb-12 text-center">
             <h2 className="font-display text-4xl font-extrabold text-foreground tracking-tight">
-              FAQs
+              {t("home.faqsTitle")}
             </h2>
           </div>
         </ScrollReveal>

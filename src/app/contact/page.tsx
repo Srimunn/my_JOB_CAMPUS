@@ -4,8 +4,10 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Mail, MapPin, Phone, User, MessageSquare, ArrowRight, Check } from "lucide-react";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useTranslation } from "@/lib/i18n";
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [parallaxOffset, setParallaxOffset] = useState({ x: 0, y: 0 });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -45,7 +47,7 @@ export default function Contact() {
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
-      toast.success("Thanks — we'll be in touch shortly.");
+      toast.success(t("contact.success"));
       form.reset();
 
       setTimeout(() => {
@@ -116,11 +118,11 @@ export default function Contact() {
         {/* Header */}
         <section className="pt-[10px] pb-16 text-center animate-fade-in-up">
           <div className="mx-auto max-w-5xl px-4">
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-tight lg:whitespace-nowrap">
-              We'd love to hear from you
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
+              {t("contact.heroTitle")}
             </h1>
             <p className="mt-4 text-base font-semibold text-muted-foreground/80">
-              Get in touch with us
+              {t("contact.heroSub")}
             </p>
           </div>
         </section>
@@ -178,28 +180,28 @@ export default function Contact() {
           className={`mx-auto max-w-2xl px-6 pb-24 animate-fade-in-up ${shakeForm ? "animate-shake" : ""}`}
           style={{ animationDelay: "400ms" }}
         >
-          <div className="rounded-3xl spotlight-card glass-panel p-8 shadow-md space-y-8 h-fit animate-fade-in-up lg:sticky lg:top-24 transition-all duration-300 hover:shadow-2xl hover:border-primary/20">
+          <div className="rounded-3xl spotlight-card glass-panel p-8 shadow-md space-y-8 h-fit animate-fade-in-up transition-all duration-300 hover:shadow-2xl hover:border-primary/20">
             <h2 className="font-display text-3xl font-extrabold text-center text-foreground mb-8">
-              Contact Us
+              {t("contact.title")}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               <Field
                 name="name"
-                label="Name"
-                placeholder="Enter your name"
+                label={t("contact.nameLabel")}
+                placeholder={t("contact.namePlaceholder")}
                 icon={<User className="h-5 w-5" />}
               />
               <Field
                 name="email"
-                label="Email"
-                placeholder="Enter your email address"
+                label={t("contact.emailLabel")}
+                placeholder={t("contact.emailPlaceholder")}
                 type="email"
                 icon={<Mail className="h-5 w-5" />}
               />
 
               <div className="space-y-1.5 group">
                 <label className="block text-sm font-semibold text-foreground/80 group-focus-within:text-primary transition-colors duration-200">
-                  Message
+                  {t("contact.messageLabel")}
                 </label>
                 <div className="relative rounded-2xl">
                   <div className="absolute top-3.5 left-0 pl-4 flex items-start pointer-events-none text-muted-foreground transition-all duration-300 group-focus-within:text-primary group-focus-within:scale-105">
@@ -208,7 +210,7 @@ export default function Contact() {
                   <textarea
                     name="message"
                     required
-                    placeholder="Type your message here..."
+                    placeholder={t("contact.messagePlaceholder")}
                     rows={6}
                     className="w-full rounded-2xl border border-border/80 bg-white/70 dark:bg-background/70 pl-11 pr-4 py-3 text-sm focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-[inset_0_1px_2px_rgba(0,0,0,0.02)] focus:bg-white dark:focus:bg-background"
                   />
@@ -247,16 +249,16 @@ export default function Contact() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    <span>Sending Message...</span>
+                    <span>{t("contact.sending")}</span>
                   </>
                 ) : isSuccess ? (
                   <>
                     <Check className="h-5 w-5 animate-morph-check text-white" />
-                    <span>Message Sent Successfully!</span>
+                    <span>{t("contact.success")}</span>
                   </>
                 ) : (
                   <>
-                    <span>Send Message</span>
+                    <span>{t("contact.sendButton")}</span>
                     <ArrowRight className="h-4 w-4 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
                   </>
                 )}

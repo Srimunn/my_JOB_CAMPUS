@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Briefcase, Calendar, IndianRupee, MapPin, Tag, Clock } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { toast } from "sonner";
+import { useTranslation } from "@/lib/i18n";
 
 export default function JobDetails() {
+  const { t } = useTranslation();
   const { id } = useParams() as { id: string };
   const { user, role } = useAuth();
   const qc = useQueryClient();
@@ -40,7 +42,7 @@ export default function JobDetails() {
 
   const apply = useMutation({
     mutationFn: async () => {
-      if (!user) throw new Error("Please sign in to apply.");
+      if (!user) throw new Error(t("jobDetails.signInToApply"));
       const { data: profile } = await supabase
         .from("profiles")
         .select("resume_url")
@@ -54,7 +56,7 @@ export default function JobDetails() {
       if (error) throw error;
     },
     onSuccess: () => {
-      toast.success("Application submitted!");
+      toast.success(t("jobDetails.successToast"));
       qc.invalidateQueries({ queryKey: ["app", id] });
     },
     onError: (e: Error) => toast.error(e.message),
@@ -63,13 +65,15 @@ export default function JobDetails() {
   if (isLoading)
     return (
       <SiteLayout>
-        <div className="mx-auto max-w-4xl px-4 py-20 text-muted-foreground">Loading…</div>
+        <div className="mx-auto max-w-4xl px-4 py-20 text-muted-foreground">
+          {t("jobDetails.loading")}
+        </div>
       </SiteLayout>
     );
   if (!job)
     return (
       <SiteLayout>
-        <div className="mx-auto max-w-4xl px-4 py-20">Job not found.</div>
+        <div className="mx-auto max-w-4xl px-4 py-20">{t("jobDetails.notFound")}</div>
       </SiteLayout>
     );
 
@@ -88,15 +92,15 @@ export default function JobDetails() {
             <div className="flex gap-2">
               {!user ? (
                 <Link href="/auth/login">
-                  <Button className="rounded-full">Sign in to Apply</Button>
+                  <Button className="rounded-full">{t("jobDetails.signInToApply")}</Button>
                 </Link>
               ) : role === "admin" ? (
                 <Button disabled className="rounded-full">
-                  Admin view
+                  {t("jobDetails.adminView")}
                 </Button>
               ) : alreadyApplied ? (
                 <Button disabled className="rounded-full">
-                  Already Applied
+                  {t("jobDetails.alreadyApplied")}
                 </Button>
               ) : (
                 <Button
@@ -104,48 +108,64 @@ export default function JobDetails() {
                   disabled={apply.isPending}
                   className="rounded-full"
                 >
-                  Apply Now
+                  {t("jobDetails.applyNow")}
                 </Button>
               )}
             </div>
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            <Meta icon={<MapPin className="h-4 w-4" />} label="Location" value={job.location} />
-            <Meta icon={<Briefcase className="h-4 w-4" />} label="Type" value={job.job_type} />
-            <Meta icon={<Tag className="h-4 w-4" />} label="Category" value={job.category} />
+            <Meta
+              icon={<MapPin className="h-4 w-4" />}
+              label={t("jobDetails.location")}
+              value={job.location}
+            />
+            <Meta
+              icon={<Briefcase className="h-4 w-4" />}
+              label={t("jobDetails.type")}
+              value={job.job_type}
+            />
+            <Meta
+              icon={<Tag className="h-4 w-4" />}
+              label={t("jobDetails.category")}
+              value={job.category}
+            />
             {job.experience && (
               <Meta
                 icon={<Clock className="h-4 w-4" />}
-                label="Experience"
+                label={t("jobDetails.experience")}
                 value={job.experience}
               />
             )}
             {job.salary && (
-              <Meta icon={<IndianRupee className="h-4 w-4" />} label="Salary" value={job.salary} />
+              <Meta
+                icon={<IndianRupee className="h-4 w-4" />}
+                label={t("jobDetails.salary")}
+                value={job.salary}
+              />
             )}
             {job.last_date && (
               <Meta
                 icon={<Calendar className="h-4 w-4" />}
-                label="Last Date"
+                label={t("jobDetails.lastDate")}
                 value={new Date(job.last_date).toLocaleDateString()}
               />
             )}
           </div>
 
           <section className="mt-8">
-            <h2 className="font-display text-xl font-bold">Description</h2>
+            <h2 className="font-display text-xl font-bold">{t("jobDetails.description")}</h2>
             <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.description}</p>
           </section>
           {job.requirements && (
             <section className="mt-6">
-              <h2 className="font-display text-xl font-bold">Requirements</h2>
+              <h2 className="font-display text-xl font-bold">{t("jobDetails.requirements")}</h2>
               <p className="mt-2 whitespace-pre-wrap text-foreground/80">{job.requirements}</p>
             </section>
           )}
           {(job.apply_link || job.apply_email) && (
             <section className="mt-8 rounded-xl bg-secondary p-4 text-sm">
-              <div className="font-semibold">How to apply</div>
+              <div className="font-semibold">{t("jobDetails.howToApply")}</div>
               {job.apply_link && (
                 <a
                   href={job.apply_link}
