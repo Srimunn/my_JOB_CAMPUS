@@ -9,8 +9,16 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { toast } from "sonner";
 import { useTranslation } from "@/lib/i18n";
 
+const ADMIN_PORTAL_TEXTS: Record<string, { divider: string; button: string }> = {
+  en: { divider: "Management", dividerKey: "management", button: "Go to Admin Portal" },
+  ta: { divider: "மேலாண்மை", dividerKey: "management", button: "நிர்வாகி உள்நுழைவு" },
+  hi: { divider: "प्रबंधन", dividerKey: "management", button: "एडमिन पोर्टल पर जाएं" },
+  te: { divider: "నిర్వహణ", dividerKey: "management", button: "అడ్మిన్ పోర్టల్‌కు వెళ్ళండి" },
+  ml: { divider: "മാനേജ്മെന്റ്", dividerKey: "management", button: "അഡ്മിൻ പോർട്ടലിലേക്ക് പോവുക" },
+};
+
 export default function Login() {
-  const { t } = useTranslation();
+  const { t, currentLanguage } = useTranslation();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -163,6 +171,21 @@ export default function Login() {
               {t("auth.createAccount")}
             </Link>
           </p>
+          <div className="relative my-5">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-border" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase tracking-wider">
+              <span className="bg-card px-2.5 text-muted-foreground/80 font-bold">
+                {(ADMIN_PORTAL_TEXTS[currentLanguage] || ADMIN_PORTAL_TEXTS["en"]).divider}
+              </span>
+            </div>
+          </div>
+          <Link href="/auth/admin" className="block w-full">
+            <Button variant="outline" className="w-full rounded-full cursor-pointer hover:bg-secondary/80 transition-all duration-300 font-bold text-xs py-2 bg-secondary/35 border-border">
+              {(ADMIN_PORTAL_TEXTS[currentLanguage] || ADMIN_PORTAL_TEXTS["en"]).button}
+            </Button>
+          </Link>
         </div>
       </div>
     </SiteLayout>

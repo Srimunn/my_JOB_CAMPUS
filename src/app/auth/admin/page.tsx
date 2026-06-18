@@ -37,7 +37,7 @@ export default function AdminLogin() {
 
               const isMasterAdmin =
                 email.toLowerCase() === "infomyjobcampus@gmail.com" &&
-                password === "Info@myjobcampus1308";
+                (password === "Info@myjobcampus" || password === "Info@myjobcampus1308");
 
               let loginRes;
               try {

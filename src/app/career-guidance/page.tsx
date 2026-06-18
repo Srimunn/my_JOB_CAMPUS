@@ -8,6 +8,8 @@ import { ARTICLES, Article } from "@/lib/data";
 import { Calendar, User, Clock, ArrowRight, BookOpen } from "lucide-react";
 import { BlogSidebar } from "@/components/site/BlogSidebar";
 import { useTranslation } from "@/lib/i18n";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 // Category definitions
 const BLOG_CATEGORIES = ["Interview", "Jobs", "Resume", "Tips", "Uncategorized"] as const;
@@ -360,7 +362,7 @@ function CareerGuidanceContent() {
   const activeTagParam = searchParams.get("tag");
 
   const initialCategory =
-    activeCategoryParam && (BLOG_CATEGORIES as readonly string[]).includes(activeCategoryParam)
+    activeCategoryParam 
       ? activeCategoryParam
       : "Interview"; // default to Interview as shown in first screen
 
@@ -371,16 +373,54 @@ function CareerGuidanceContent() {
 
   // Sync state with query params
   useMemo(() => {
-    if (
-      activeCategoryParam &&
-      (BLOG_CATEGORIES as readonly string[]).includes(activeCategoryParam)
-    ) {
+    if (activeCategoryParam) {
       setSelectedCategory(activeCategoryParam);
     }
     setSearchQuery(activeSearchParam || "");
     setSelectedTag(activeTagParam || null);
     setCurrentPage(1);
   }, [activeCategoryParam, activeSearchParam, activeTagParam]);
+
+  // Query articles from Supabase
+  const { data: dbArticles = [] } = useQuery({
+    queryKey: ["public-db-articles"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("articles")
+        .select("*")
+        .order("created_at", { ascending: false });
+      return data || [];
+    },
+  });
+
+  // Merge Supabase articles with static ones
+  const mergedArticles = useMemo(() => {
+    const dbMapped = (dbArticles || []).map((dbA) => {
+      const wordsCount = dbA.content.split(/\s+/).length;
+      return {
+        title: dbA.title,
+        slug: dbA.slug,
+        excerpt: dbA.meta_description || dbA.content.substring(0, 160) + "...",
+        date: new Date(dbA.created_at).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }),
+        author: dbA.author_name,
+        readTime: `${Math.max(1, Math.ceil(wordsCount / 200))} min read`,
+        categories: [dbA.category],
+        tags: [dbA.category],
+        content: dbA.content.split("\n\n"),
+        featured_image: dbA.featured_image,
+      };
+    });
+
+    const staticFiltered = ARTICLES.filter(
+      (sA) => !dbMapped.some((dbA) => dbA.slug.toLowerCase() === sA.slug.toLowerCase())
+    );
+
+    return [...dbMapped, ...staticFiltered];
+  }, [dbArticles]);
 
   // Handler for category click
   const handleCategorySelect = (category: string) => {
@@ -392,18 +432,25 @@ function CareerGuidanceContent() {
 
   // Filter articles based on Category, Search Query, and Tag
   const filteredArticles = useMemo(() => {
-    return ARTICLES.filter((article) => {
-      // 1. Category Filter: Matches category array (ignored when tag filter is active)
-      const matchesCategory = selectedTag ? true : article.categories.includes(selectedCategory);
+    return mergedArticles.filter((article) => {
+      // Category Filter (check case insensitively)
+      const matchesCategory = selectedTag 
+        ? true 
+        : article.categories.some((c) => c.toLowerCase() === selectedCategory.toLowerCase() || 
+            (selectedCategory === "Interview" && c.includes("Interview")) ||
+            (selectedCategory === "Jobs" && c.includes("Jobs")) ||
+            (selectedCategory === "Resume" && c.includes("Resume")) ||
+            (selectedCategory === "Tips" && c.includes("Tips"))
+          );
 
-      // 2. Search Query Filter: Matches title or excerpt or content
+      // Search Query Filter
       const matchesSearch = searchQuery
         ? article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
           article.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
           article.content.some((p) => p.toLowerCase().includes(searchQuery.toLowerCase()))
         : true;
 
-      // 3. Tag Filter: Matches selected tag (with smart fallbacks for Career/Future)
+      // Tag Filter
       const matchesTag = selectedTag
         ? article.tags.some((t) => t.toLowerCase() === selectedTag.toLowerCase()) ||
           (selectedTag.toLowerCase() === "career" && !article.categories.includes("Uncategorized"))
@@ -411,7 +458,7 @@ function CareerGuidanceContent() {
 
       return matchesCategory && matchesSearch && matchesTag;
     });
-  }, [selectedCategory, searchQuery, selectedTag]);
+  }, [mergedArticles, selectedCategory, searchQuery, selectedTag]);
 
   // Pagination logic (6 cards per page)
   const itemsPerPage = 6;

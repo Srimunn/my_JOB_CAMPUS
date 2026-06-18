@@ -38,3 +38,20 @@ build/
 tsconfig.tsbuildinfo
 curl_res.txt
 
+# Environment secrets
+.env
+.env.local
+.env.production
+
+# Helper scripts with secrets
+check_admin.ts
+check_storage_policies.ts
+confirm_email.ts
+fix_execute.ts
+test_has_role.ts
+test_user_upload.ts
+scratch_query.ts
+seed_jobs.ts
+
+# Supabase temp
+supabase/.temp/

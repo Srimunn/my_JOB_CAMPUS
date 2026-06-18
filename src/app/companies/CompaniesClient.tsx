@@ -75,30 +75,41 @@ export default function CompaniesClient() {
   const [loc, setLoc] = useState("");
   const [cat, setCat] = useState("");
 
+  // Fetch all companies from DB
+  const { data: dbCompanies = [] } = useQuery({
+    queryKey: ["companies-list-public"],
+    queryFn: async () => {
+      const { data } = await supabase.from("companies").select("*");
+      return data || [];
+    },
+  });
+
   // Fetch all jobs from DB to dynamically group by company, location, and category
   const { data: dbJobs = [], isLoading } = useQuery({
     queryKey: ["all-db-jobs-for-companies"],
     queryFn: async () => {
-      const { data } = await supabase.from("jobs").select("company, location, category");
+      const { data } = await supabase.from("jobs").select("company, location, category, company_id, status");
       return data || [];
     },
   });
 
   const { mergedCompanies, citiesList, categoriesList } = useMemo(() => {
-    // 1. Group DB jobs by company
+    const activeJobs = dbJobs.filter((j) => j.status === "active" || !j.status);
+
+    // Group active jobs by company_id or company name
     const companyJobsMap: Record<
       string,
       { jobsCount: number; locations: Set<string>; categories: Set<string> }
     > = {};
 
-    dbJobs.forEach((job) => {
+    activeJobs.forEach((job) => {
       if (!job.company) return;
-      const normalizedName = job.company.trim();
-      const matchName = normalizedName.toLowerCase();
+      const key = job.company_id || job.company.trim();
+      const normalizedKey = key.toLowerCase();
 
-      let existingKey = Object.keys(companyJobsMap).find((k) => k.toLowerCase() === matchName);
+      let existingKey = Object.keys(companyJobsMap).find((k) => k.toLowerCase() === normalizedKey);
       if (!existingKey) {
-        existingKey = normalizedName;
+        existingKey = key;
         companyJobsMap[existingKey] = {
           jobsCount: 0,
           locations: new Set(),
@@ -111,52 +122,79 @@ export default function CompaniesClient() {
       if (job.category) companyJobsMap[existingKey].categories.add(job.category.trim());
     });
 
-    // 2. Build final merged companies list starting with TOP_COMPANIES
     const resultList: {
       name: string;
       jobs: number;
+      slug: string;
       locations: Set<string>;
       categories: Set<string>;
     }[] = [];
 
-    TOP_COMPANIES.forEach((tc) => {
-      const dbMatchKey = Object.keys(companyJobsMap).find(
-        (k) => k.toLowerCase() === tc.name.toLowerCase(),
-      );
-
-      let jobsCount = tc.jobs;
+    // Add DB companies first
+    dbCompanies.forEach((comp) => {
+      let jobsCount = 0;
       const locations = new Set<string>();
       const categories = new Set<string>();
 
-      if (dbMatchKey) {
-        jobsCount += companyJobsMap[dbMatchKey].jobsCount;
-        companyJobsMap[dbMatchKey].locations.forEach((l) => locations.add(l));
-        companyJobsMap[dbMatchKey].categories.forEach((c) => categories.add(c));
-        delete companyJobsMap[dbMatchKey];
+      if (comp.location) locations.add(comp.location);
+
+      let jobGroup = companyJobsMap[comp.id];
+      if (!jobGroup) {
+        const matchKey = Object.keys(companyJobsMap).find((k) => k.toLowerCase() === comp.name.toLowerCase());
+        if (matchKey) {
+          jobGroup = companyJobsMap[matchKey];
+          delete companyJobsMap[matchKey];
+        }
+      } else {
+        delete companyJobsMap[comp.id];
+      }
+
+      if (jobGroup) {
+        jobsCount = jobGroup.jobsCount;
+        jobGroup.locations.forEach((l) => locations.add(l));
+        jobGroup.categories.forEach((c) => categories.add(c));
       }
 
       resultList.push({
-        name: tc.name,
+        name: comp.name,
         jobs: jobsCount,
+        slug: comp.slug,
         locations,
         categories,
       });
     });
 
-    // Add any remaining companies from DB that weren't in TOP_COMPANIES
-    Object.entries(companyJobsMap).forEach(([name, data]) => {
+    // Merge static TOP_COMPANIES that don't match any DB company by name
+    TOP_COMPANIES.forEach((tc) => {
+      const nameLower = tc.name.toLowerCase();
+      const existsInDb = resultList.some((r) => r.name.toLowerCase() === nameLower);
+      if (existsInDb) return;
+
+      let jobsCount = tc.jobs;
+      const locations = new Set<string>();
+      const categories = new Set<string>();
+
+      const matchKey = Object.keys(companyJobsMap).find((k) => k.toLowerCase() === nameLower);
+      if (matchKey) {
+        jobsCount += companyJobsMap[matchKey].jobsCount;
+        companyJobsMap[matchKey].locations.forEach((l) => locations.add(l));
+        companyJobsMap[matchKey].categories.forEach((c) => categories.add(c));
+        delete companyJobsMap[matchKey];
+      }
+
       resultList.push({
-        name,
-        jobs: data.jobsCount,
-        locations: data.locations,
-        categories: data.categories,
+        name: tc.name,
+        jobs: jobsCount,
+        slug: nameLower.replace(/[^a-z0-9]+/g, "-"),
+        locations,
+        categories,
       });
     });
 
-    // Collect all available cities and categories from DB jobs to populate select filters
+    // Collect all available cities and categories from jobs to populate select filters
     const citiesSet = new Set<string>();
     const categoriesSet = new Set<string>();
-    dbJobs.forEach((job) => {
+    activeJobs.forEach((job) => {
       if (job.location) citiesSet.add(job.location.trim());
       if (job.category) categoriesSet.add(job.category.trim());
     });
@@ -166,7 +204,7 @@ export default function CompaniesClient() {
       citiesList: Array.from(citiesSet).sort(),
       categoriesList: Array.from(categoriesSet).sort(),
     };
-  }, [dbJobs]);
+  }, [dbCompanies, dbJobs]);
 
   // Filter companies by search keyword, location, and category
   const filteredCompanies = useMemo(() => {
