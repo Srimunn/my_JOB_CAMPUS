@@ -38,10 +38,6 @@ export default function Login() {
               e.preventDefault();
               setLoading(true);
 
-              const isMasterAdmin =
-                email.toLowerCase() === "infomyjobcampus@gmail.com" &&
-                password === "Info@myjobcampus1308";
-
               let loginRes;
               try {
                 loginRes = await supabase.auth.signInWithPassword({ email, password });
@@ -52,58 +48,8 @@ export default function Login() {
                 };
               }
 
-              if (loginRes.error && isMasterAdmin) {
-                try {
-                  const signUpRes = await supabase.auth.signUp({
-                    email,
-                    password,
-                    options: {
-                      data: { full_name: "Admin Office", phone: "+91 8825415169" },
-                    },
-                  });
-
-                  if (!signUpRes.error) {
-                    loginRes = await supabase.auth.signInWithPassword({ email, password });
-                  }
-                } catch (signUpErr) {
-                  console.error("Signup fallback error:", signUpErr);
-                }
-              }
-
-              // Fallback to local admin mock session if supabase rate-limits or rejects login
-              if ((loginRes.error || !loginRes.data.user) && isMasterAdmin) {
-                const mockSession = {
-                  access_token: "mock_admin_token",
-                  token_type: "bearer",
-                  expires_in: 3600,
-                  refresh_token: "mock_admin_refresh_token",
-                  user: {
-                    id: "admin-id-1308",
-                    aud: "authenticated",
-                    role: "authenticated",
-                    email: "infomyjobcampus@gmail.com",
-                    email_confirmed_at: new Date().toISOString(),
-                    phone: "+91 8825415169",
-                    confirmed_at: new Date().toISOString(),
-                    last_sign_in_at: new Date().toISOString(),
-                    app_metadata: {},
-                    user_metadata: {
-                      full_name: "Admin Office",
-                    },
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                  },
-                };
-                localStorage.setItem("mock_admin_session", JSON.stringify(mockSession));
-                toast.success("Welcome back, Admin (Local Session)!");
-                setTimeout(() => {
-                  window.location.href = "/admin";
-                }, 500);
-                return;
-              }
-
               if (loginRes.error) {
-                toast.error(loginRes.error.message);
+                toast.error("Invalid Credentials");
                 setLoading(false);
                 return;
               }
@@ -115,14 +61,6 @@ export default function Login() {
                 return;
               }
 
-              if (email.toLowerCase() === "infomyjobcampus@gmail.com") {
-                try {
-                  await supabase.from("user_roles").insert({ user_id: user.id, role: "admin" });
-                } catch (err) {
-                  console.log("Admin role already assigned or error:", err);
-                }
-              }
-
               const { data: roles } = await supabase
                 .from("user_roles")
                 .select("role")
@@ -132,11 +70,11 @@ export default function Login() {
                 (roles ?? []).some((r) => r.role === "admin");
 
               setLoading(false);
-              toast.success(is_admin ? "Welcome back, Admin!" : "Signed in successfully!");
-
               if (is_admin) {
+                toast.success("Welcome back, Admin!");
                 router.push("/admin");
               } else {
+                toast.success("Signed in successfully!");
                 router.push("/seeker");
               }
             }}
@@ -165,12 +103,6 @@ export default function Login() {
               {loading ? t("auth.loggingIn") : t("auth.loginButton")}
             </Button>
           </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            {t("auth.newHere")}{" "}
-            <Link href="/auth/register" className="text-primary underline">
-              {t("auth.createAccount")}
-            </Link>
-          </p>
           <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-border" />

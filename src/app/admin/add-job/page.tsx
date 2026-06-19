@@ -154,6 +154,16 @@ export default function AddJob() {
     }
 
     setLoading(true);
+
+    // Verify active session before insert
+    const { data: { user: authUser } } = await supabase.auth.getUser();
+    if (!authUser) {
+      toast.error("Authentication required. Redirecting to login...");
+      router.push("/auth/admin");
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from("jobs").insert({
       title,
       company: selectedCompany.name, // sync for compatibility

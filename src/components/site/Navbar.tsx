@@ -219,13 +219,6 @@ export function Navbar() {
                 >
                   {t("nav.signIn")}
                 </Link>
-                <Link
-                  href="/auth/register"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                >
-                  {t("auth.createAccount")}
-                </Link>
               </>
             )}
           </nav>

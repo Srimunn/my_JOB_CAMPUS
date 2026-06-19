@@ -122,6 +122,15 @@ export default function EditCompany() {
 
     try {
       setUploading(true);
+
+      // Verify active session before upload
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Session expired or inactive. Please log in again.");
+        console.error("Upload failed: No active Supabase session.");
+        return;
+      }
+
       const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -130,7 +139,10 @@ export default function EditCompany() {
         .from("logos")
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Full storage upload error:", uploadError);
+        throw new Error(`${uploadError.message} (Bucket: logos)`);
+      }
 
       const { data } = supabase.storage.from("logos").getPublicUrl(filePath);
       setLogoUrl(data.publicUrl);
@@ -150,28 +162,41 @@ export default function EditCompany() {
     }
 
     setUpdating(true);
+
+    // Verify active session before update
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Session expired or inactive. Cannot save changes.");
+      console.error("Update failed: No active Supabase session.");
+      setUpdating(false);
+      return;
+    }
+
+    const payload = {
+      name,
+      description: description || null,
+      industry: industry || null,
+      location: location || null,
+      website_url: websiteUrl || null,
+      logo_url: logoUrl || null,
+      featured,
+      slug,
+      seo_title: seoTitle || null,
+      seo_description: seoDescription || null,
+      focus_keyword: focusKeyword || null,
+      canonical_url: canonicalUrl || null,
+      og_image: ogImage || null,
+    };
+
     const { error } = await supabase
       .from("companies")
-      .update({
-        name,
-        description: description || null,
-        industry: industry || null,
-        location: location || null,
-        website_url: websiteUrl || null,
-        logo_url: logoUrl || null,
-        featured,
-        slug,
-        seo_title: seoTitle || null,
-        seo_description: seoDescription || null,
-        focus_keyword: focusKeyword || null,
-        canonical_url: canonicalUrl || null,
-        og_image: ogImage || null,
-      })
+      .update(payload)
       .eq("id", id);
 
     setUpdating(false);
     if (error) {
-      toast.error("Failed to update company: " + error.message);
+      console.error("Full company update database error:", error, "Payload:", payload);
+      toast.error(`Failed to update company: ${error.message} (Detail: ${error.details || 'Row-level security policy violation on table companies'})`);
       return;
     }
 

@@ -119,6 +119,16 @@ export default function AddArticle() {
     }
 
     setLoading(true);
+
+    // Verify active session before insert
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Authentication required. Redirecting to login...");
+      router.push("/auth/admin");
+      setLoading(false);
+      return;
+    }
+
     const { error } = await supabase.from("articles").insert({
       title,
       slug,

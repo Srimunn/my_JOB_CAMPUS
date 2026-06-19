@@ -26,25 +26,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if we have a local mock admin session
-    const mockSessionStr =
-      typeof window !== "undefined" ? localStorage.getItem("mock_admin_session") : null;
-    if (mockSessionStr) {
-      try {
-        const mockSession = JSON.parse(mockSessionStr);
-        setSession(mockSession);
-        setRole("admin");
-        setLoading(false);
-      } catch (e) {
-        console.error("Failed to parse mock session:", e);
-      }
-    }
-
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
-      if (!s && typeof window !== "undefined" && localStorage.getItem("mock_admin_session")) {
-        // Keep mock session active
-        return;
-      }
       setSession(s);
       if (s?.user) {
         setTimeout(() => {
@@ -75,16 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         setSession(data.session);
-      } else if (typeof window !== "undefined") {
-        const mock = localStorage.getItem("mock_admin_session");
-        if (mock) {
-          try {
-            setSession(JSON.parse(mock));
-            setRole("admin");
-          } catch (_) {
-            // Ignored mock parsing failure
-          }
-        }
       }
       setLoading(false);
     });
@@ -100,9 +72,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         role,
         loading,
         signOut: async () => {
-          if (typeof window !== "undefined") {
-            localStorage.removeItem("mock_admin_session");
-          }
           await supabase.auth.signOut();
           setRole(null);
           setSession(null);

@@ -84,6 +84,15 @@ export default function AddCompany() {
 
     try {
       setUploading(true);
+      
+      // Verify active session before upload
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Session expired or inactive. Please log in again.");
+        console.error("Upload failed: No active Supabase session.");
+        return;
+      }
+
       const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${fileName}`;
@@ -92,7 +101,10 @@ export default function AddCompany() {
         .from("logos")
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Full storage upload error:", uploadError);
+        throw new Error(`${uploadError.message} (Bucket: logos)`);
+      }
 
       const { data } = supabase.storage.from("logos").getPublicUrl(filePath);
       setLogoUrl(data.publicUrl);
@@ -112,7 +124,17 @@ export default function AddCompany() {
     }
 
     setLoading(true);
-    const { error } = await supabase.from("companies").insert({
+
+    // Verify active session before insert
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Authentication required. Redirecting to login...");
+      router.push("/auth/admin");
+      setLoading(false);
+      return;
+    }
+
+    const payload = {
       name,
       description: description || null,
       industry: industry || null,
@@ -126,11 +148,14 @@ export default function AddCompany() {
       focus_keyword: focusKeyword || null,
       canonical_url: canonicalUrl || null,
       og_image: ogImage || null,
-    });
+    };
+
+    const { error } = await supabase.from("companies").insert(payload);
 
     setLoading(false);
     if (error) {
-      toast.error("Failed to add company: " + error.message);
+      console.error("Full company insert database error:", error, "Payload:", payload);
+      toast.error(`Failed to add company: ${error.message} (Detail: ${error.details || 'Row-level security policy violation on table companies'})`);
       return;
     }
 
